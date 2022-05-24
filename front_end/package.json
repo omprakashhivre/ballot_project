@@ -1,7 +1,6 @@
 {
   "name": "ballot",
   "version": "0.1.0",
-  "homepage": "https://dragonfist630.github.io",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^3.4.0",
