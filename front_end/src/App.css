@@ -1,0 +1,67 @@
+.background {
+  background: linear-gradient(247.32deg, rgba(0, 0, 0, 0) 0%, rgba(25, 25, 35, 1) 20.8%), url(./image/bg.jpg);
+  background-blend-mode: hard-light, normal;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-size: 100vw 150vh;
+  mix-blend-mode: normal;
+  width: 100vw;
+  height: 100vh;
+  padding: 1.4rem 2.5rem;
+  overflow-y: scroll;
+}
+/* .container_wrap{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center!important;
+  align-items: center!important;
+} */
+::-webkit-scrollbar {
+  width: 0.063rem;
+}
+::-webkit-scrollbar-track {
+  /* Track */
+  background: #191923;
+}
+::-webkit-scrollbar-thumb {
+  /* Handle */
+  background: #35353b;
+  border-radius: 0.5rem;
+}
+::-webkit-scrollbar-thumb:hover {
+  /* Handle on hover */
+  background: #b9b9b9;
+}
+
+@media (max-width: 264px) {
+  html {
+    font-size: 40% !important;
+  }
+}
+@media (max-width: 304px) {
+  html {
+    font-size: 50% !important;
+  }
+}
+@media (max-width: 468px) {
+  html {
+    font-size: 50% !important;
+  }
+  .reg {
+    width: 100vw!important;
+    left: 0!important;
+  }
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 70%;
+  }
+}
+@media (min-width: 769px) and (max-width: 1119px) {
+}
+@media (min-width: 1120px) {
+  html {
+    font-size: 90%;
+  }
+}

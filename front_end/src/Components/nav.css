@@ -1,0 +1,70 @@
+.header {
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 3em;
+  line-height: 4.5rem;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  color: white;
+}
+.img-size {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: #0029fe;
+  border-radius: 1.5rem;
+  margin-right: 0.5rem;
+}
+.display {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0rem 0rem 0rem 0rem;
+  width: 15%;
+}
+nav{
+  /* position: fixed!important; */
+  z-index:10;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /* background-color: aqua; */
+  width: 90%;
+}
+#profile_pic{
+  border-radius: 2.5rem;
+  width: 3.963rem;
+  height: 3.813rem;
+  margin: auto;
+  text-align: center;
+  padding: 0.6rem;
+  font-size: 24px!important;
+  background-color: #0029fe;
+  
+}
+#imgSpan_wrap{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* flex-wrap: wrap; */
+  /* background-color: blue; */
+  width: 20%;
+  padding-right: 1rem;
+}
+#imgSpan_wrap span{
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}
+.logoutSpan{
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}

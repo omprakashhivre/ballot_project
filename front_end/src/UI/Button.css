@@ -1,0 +1,18 @@
+.reg_submit {
+    width: 18.125rem;
+    height: 4.25rem;
+    background: #0029fe;
+    background-blend-mode: hard-light;
+    border-radius: 3.125rem;
+    border: none;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+    color: white;
+    align-self: center;
+  }
+  img{
+    margin-bottom: 0.2rem;
+  }

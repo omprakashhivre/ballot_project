@@ -1,0 +1,115 @@
+.Ahomepage_form {
+  left: 10rem;
+  top: 5%;
+  /* position: fixed; */
+}
+.Inner_container {
+  width: 100%;
+  padding: 0px !important;
+  margin-top: 1rem;
+}
+#Outer_container {
+  /* background-color: aqua; */
+  padding: 0px !important;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  width: 100% !important;
+}
+.inner_form {
+  width: 80%;
+  background-color: white;
+  padding: 2rem;
+  float: right;
+  margin-bottom: 1rem;
+}
+.inner_form h3 {
+  font-weight: 600;
+}
+.p_inline_bar {
+  /* for inline progress bar */
+  height: 6px !important;
+  border-radius: 2vh !important;
+  background-color: white !important;
+  margin-left: 2.5rem;
+  margin-bottom: 1rem;
+}
+.percent_name_wrap span {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-right: 0.7rem;
+  color: black;
+  font-weight: 500;
+}
+.percent_name_wrap {
+  width: 21%;
+  display: flex;
+  flex-direction: row;
+}
+.inline-progress-bar {
+  color: #40e0d0;
+  border-radius: 1rem;
+}
+.bottom_form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 2.25rem;
+}
+.usersPic_voteCount {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 22%;
+}
+.EditRemoveIcon_wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.EditRemoveIcon_wrap img {
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+}
+.EditRemoveIcon_wrap img{
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.usersPic{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: fit-content;
+  width: 17%;
+}
+.usersPic img {
+  border-radius: 1rem;
+  border: 2px solid white;
+  width: 2rem;
+  height: 2rem;
+}
+#add_frame{
+  float: left;
+  margin-bottom: 1rem;
+}
+.usersPic img:nth-child(2){
+    position: absolute;
+    left: 22.2%;
+    
+}
+.usersPic img:nth-child(3){
+    position: absolute;
+    left: 21%;
+    
+}
+.usersPic img:nth-child(1){
+    position: relative;
+    /* bottom: -0.2%!important; */
+   
+}
