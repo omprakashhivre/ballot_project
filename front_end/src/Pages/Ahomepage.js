@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { APIcontext } from "../API/APIProvider";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import LoadingSpinner from "../Components/LoadingSpinner";
 import '../Components/spinner.css'
@@ -73,7 +73,7 @@ const Ahomepage = (props) => {
                         // console.log(currElem);
                         currElem.options.map((op) => sum = sum + op.totalvote)
                         return (
-                          <div className="inner_form" key={currElem.id}>
+                          <div className={"inner_form"} key={currElem.id}>
                             <h3>{currElem.query}</h3>
                             {currElem.options.map((curr, index) => {
 

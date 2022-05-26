@@ -1,2 +1,3 @@
-./ballots/node_modules
-./voting_project/Online Voting Project/node_modules
+/ballots/node_modules
+/voting_project/Online Voting Project/node_modules
+/Ballot_Typeorm_api/node_modules/
