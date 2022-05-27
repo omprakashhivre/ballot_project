@@ -1,4 +1,6 @@
-const db = require("../config/db.config");
+
+
+const db = require("");
 
 //registration
 exports.register = (data, callback) => {
