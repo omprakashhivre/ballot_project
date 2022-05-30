@@ -45,16 +45,16 @@ import { createConnection } from "typeorm";
 import { router } from "./router/routes";
 const app = express();
 app.use(bodyParser.json());
-const PORT = 5000;
+const PORT = process.env.PORT
 
 app.use('/users',router)
 
 createConnection({
   type:"mysql",
-  host:"localhost",
-  username:"root",
-  password:"password",
-  database:"typeormnode",
+  host:process.env.DATABASEHOST,
+  username:process.env.DATABASEUSER,
+  password:process.env.DATABASEPASSWORD,
+  database:process.env.DATABASENAME,
   synchronize:true,
   // entities:[user],
   entities:["./model/*.ts"],

@@ -5,18 +5,27 @@ import { User } from '../model/User';
 import { Query } from '../model/Query';
 import { Option } from '../model/Option';
 import { Vote } from '../model/Vote';
-require('dotenv').config();
+const env = require('dotenv').config();
 const nodemailer = require("nodemailer");
 
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS
+    }
+})
 
 
 // const sendMail =  (req:Request, res:Response) => {
 //     const to = req.body.to
 //     const sub = req.body.subject
 //     const body = req.body.text
-       
+
 //     try {
-        
+
 //         const receiver = to
 //         const subject =  sub
 //         const bodytext = body
@@ -66,18 +75,18 @@ const userReg = async (req: Request, res: Response) => {
     try {
         const data = await entityManager.save(user)
         console.log("registered");
-        await sendmail(user.email,"Registered successfully..","Account created successfully")
+        await sendmail(user.email, "Registered successfully..", "Account created successfully")
         res.json({
             status: 1,
             message: "Registered successfully..",
             data: data
         })
-       
+
     } catch (error) {
         res.json({
             status: 0,
             text: "User is Already Registered, please login ..",
-            "error" : error
+            "error": error
         })
     }
 
@@ -91,23 +100,23 @@ const userLogin = async (req: Request, res: Response) => {
 
     try {
         const data = await entityManager
-        .createQueryBuilder(User,"u")
-        .select(["u.firstname","u.lastname","u.email","u.password"])
-        .where("email = :email &&  password = :pass",{email : req.body.email , pass : req.body.password})
-        .getOne()
+            .createQueryBuilder(User, "u")
+            .select(["u.firstname", "u.lastname", "u.email", "u.password"])
+            .where("email = :email &&  password = :pass", { email: req.body.email, pass: req.body.password })
+            .getOne()
         console.log("Login");
-        if(data !== null)
+        if (data !== null)
             res.json({
                 status: 1,
                 Message: "Login successfully..",
                 data: data
             })
-        else{
+        else {
             res.json({
                 status: 0,
                 Message: "Invalid Credentials.."
             })
-        }    
+        }
     } catch (error) {
         res.json({
             status: 0,
@@ -120,14 +129,14 @@ const userLogin = async (req: Request, res: Response) => {
 const updatePassword = async (req: Request, res: Response) => {
     const entityManager = getManager()
     console.log("updating password...");
-    const given_email =req.body.email
+    const given_email = req.body.email
     const given_pass = req.body.password
 
     try {
         console.log("pass update #121");
-        
-        const data = await entityManager.update(User,{"email" : given_email},{"password" : given_pass})
-       
+
+        const data = await entityManager.update(User, { "email": given_email }, { "password": given_pass })
+
 
         res.json({
             status: 1,
@@ -155,20 +164,42 @@ const castVote = async (req: Request, res: Response) => {
     try {
         console.log("vote casting ..... ");
         const data = await entityManager.insert(Vote, vote)
+        const email = await entityManager
+            .createQueryBuilder()
+            .select(["u.email", "u.firstname"])
+            .from(User , 'u')
+            .where("id = :id", { id: vote.userId })
+            .getOne()
 
-        res.json({
-            status: 1,
-            text: "Vote casted successfully..",
-            data: data
-        })
-    } catch (error) {
+        const query = await entityManager
+            .createQueryBuilder()
+            .select("q.queryname")
+            .from(Query , 'q')
+            .where("queryId = :id", { id: vote.queryId })
+            .getOne() 
+            
+            console.log(query);
+         
+        
+        await sendmail(email?.email, "Thanks for Voting", `hi ${email?.firstname}, \n 
+        Your vote successfully submitted for Query id ${vote.queryId} - ${query?.queryname}.\n Thanks for Voting...`)
+       
+            res.json({
+                status: 1,
+                text: "Vote casted successfully..",
+                data: data
+            })
+
+     } catch (error) {
         res.json({
             status: 0,
             text: "Oops! something went worng..",
             error: error
         })
     }
+
 }
+
 
 const addQuery = async (req: Request, res: Response) => {
     const entityManager = getManager()
@@ -192,6 +223,7 @@ const addQuery = async (req: Request, res: Response) => {
         console.log(saved);
         return saved;
     })
+    
     res.json({
         "status": "one to many calling",
         "query": data,
@@ -215,7 +247,7 @@ const getAllquery = async (_req: Request, res: Response) => {
         const data = await entityManager.find(Query)
 
         console.log("getting all ..... ");
-        
+
 
         res.json({
             status: 1,
@@ -238,22 +270,20 @@ const getAllOption = async (req: Request, res: Response) => {
     console.log("getting options .......");
     const entityManager = getManager();
     const key = Object.entries(req.query)
+    
 
     try {
-        // const data = await getRepository(Query)
-        //     .createQueryBuilder("query")
-        //     .leftJoin("q.queryid","option")
-        //     .getMany()
 
         const data = await entityManager
-        .createQueryBuilder()
-        .select(["o.options","o.optionId"])
-        .from(Option,'o')
-        .where("queryId = :id",{id : key[0][1]})
-        .getMany()
+            .createQueryBuilder()
+            .select(["o.options", "o.optionId"])
+            .from(Option, 'o')
+            .where("queryId = :id", { id: key[0][1] })
+            .getMany()
+
 
         console.log("getting all options..... ");
-        
+
 
         res.json({
             status: 1,
@@ -278,14 +308,14 @@ const getFilteredQuery = async (_req: Request, res: Response) => {
 
     try {
         const data = await entityManager
-        .createQueryBuilder()
-        .select(["q.queryname","q.queryId","q.queryEndDate"])
-        .from(Query,'q')
-        .where("queryenddate > :id",{id : new Date()})
-        .getMany()
+            .createQueryBuilder()
+            .select(["q.queryname", "q.queryId", "q.queryEndDate"])
+            .from(Query, 'q')
+            .where("queryenddate > :id", { id: new Date() })
+            .getMany()
 
         console.log("getting  live queries only..... ");
-        
+
 
         res.json({
             status: 1,
@@ -302,21 +332,21 @@ const getFilteredQuery = async (_req: Request, res: Response) => {
     }
 }
 
-const deleteQuery  = async (req: Request, res: Response) => {
+const deleteQuery = async (req: Request, res: Response) => {
 
 
     console.log("delete query called .......");
     const entityManager = getManager()
-    const del_qid  = req.body.queryId
+    const del_qid = req.body.queryId
 
     try {
         const data = await entityManager
-        .createQueryBuilder().delete().from(Query).where("queryid = :id", { id: del_qid }).execute()
-        
+            .createQueryBuilder().delete().from(Query).where("queryid = :id", { id: del_qid }).execute()
+
 
         res.json({
             status: 1,
-            text: "query id["+del_qid+"] deleted successfully..",
+            text: "query id[" + del_qid + "] deleted successfully..",
             data: data
         })
     } catch (error) {
@@ -334,15 +364,15 @@ const voteForSingleOption = async (req: Request, res: Response) => {
     const entityManager = getManager();
     // const optionid = req.body.optionId
     const key = Object.entries(req.query)
-    
+
     try {
-         const data = await entityManager.createQueryBuilder(Vote,"vote")
-         .select('COUNT(`voteid`)', 'voteforoneoption')
-         .where("optionid = :id",{id : key[0][1]})
-         .getRawOne();
-         
-      
-         res.json({
+        const data = await entityManager.createQueryBuilder(Vote, "vote")
+            .select('COUNT(`voteid`)', 'voteforoneoption')
+            .where("optionid = :id", { id: key[0][1] })
+            .getRawOne();
+
+
+        res.json({
             status: 1,
             text: "total vote for one option..",
             data: data
@@ -362,15 +392,15 @@ const totalVote = async (req: Request, res: Response) => {
     const entityManager = getManager();
     // const queryid = req.body.queryid
     const key = Object.entries(req.query)
-    
+
     try {
-         const data = await entityManager.createQueryBuilder(Vote,"vote")
-         .select('COUNT(`voteid`)', 'voteforonequery')
-         .where("queryid = :id",{id : key[0][1]})
-         .getRawOne();
-         
-      
-         res.json({
+        const data = await entityManager.createQueryBuilder(Vote, "vote")
+            .select('COUNT(`voteid`)', 'voteforonequery')
+            .where("queryid = :id", { id: key[0][1] })
+            .getRawOne();
+
+
+        res.json({
             status: 1,
             text: "total vote for one option..",
             data: data
@@ -385,11 +415,11 @@ const totalVote = async (req: Request, res: Response) => {
     }
 }
 
-const sendmail = ( _to: any, _subject: any ,_text: any) => {
+const sendmail = (_to: any, _subject: any, _text: any) => {
     try {
-        
+
         const receiver = _to
-        const subject =  _subject
+        const subject = _subject
         const bodytext = _text
 
         // console.log("yeah hey ! it works..");
@@ -399,21 +429,14 @@ const sendmail = ( _to: any, _subject: any ,_text: any) => {
             subject: subject,
             text: bodytext
         }
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.gmail.com",
-            auth: {
-                user: "ballot.project.real@gmail.com",
-                pass: 'Pass@123'
-            }
-        })
-        transporter.sendMail(options, (err:string, info:string) => {
+       
+        transporter.sendMail(options, (err: string, info: string) => {
             if (err) {
                 console.log("error occurred :" + err)
                 return err
             }
             else {
-                console.log("email send successsfully to ---> "+receiver );
+                console.log("email send successsfully to ---> " + receiver);
                 return info
             }
 
@@ -429,5 +452,7 @@ const sendmail = ( _to: any, _subject: any ,_text: any) => {
 
 
 
-export { addQuery, userReg, userLogin, castVote, getAllquery,
-    getAllOption ,getFilteredQuery,updatePassword,deleteQuery,voteForSingleOption,totalVote}
+export {
+    addQuery, userReg, userLogin, castVote, getAllquery,
+    getAllOption, getFilteredQuery, updatePassword, deleteQuery, voteForSingleOption, totalVote
+}
