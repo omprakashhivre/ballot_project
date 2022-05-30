@@ -8,56 +8,47 @@ import { Vote } from '../model/Vote';
 require('dotenv').config();
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    auth: {
-        user: "xcaliusomg@gmail.com",
-        pass: process.env.PASS
-    }
-})
 
-const sendMail =  (req:Request, res:Response) => {
-    const to = req.body.to
-    const sub = req.body.subject
-    const body = req.body.text
+
+// const sendMail =  (req:Request, res:Response) => {
+//     const to = req.body.to
+//     const sub = req.body.subject
+//     const body = req.body.text
        
-    try {
+//     try {
         
-        const receiver = to
-        const subject =  sub
-        const bodytext = body
+//         const receiver = to
+//         const subject =  sub
+//         const bodytext = body
 
-        console.log("yeah hey ! it works..");
-        const options = {
-            from: "xcaliusomg@gmail.com",
-            to: receiver,
-            subject: subject,
-            text: bodytext
-        }
-        transporter.sendMail(options, (err:string, info:string) => {
-            if (err) {
-                console.log("error occurred :" + err)
-                res.send("error : "+err)
-                return err
-            }
-            else {
-                console.log("email send successsfully to ---> "+receiver );
-                res.send("success : "+info)
-                return info
-            }
+//         console.log("yeah hey ! it works..");
+//         const options = {
+//             from: "xcaliusomg@gmail.com",
+//             to: receiver,
+//             subject: subject,
+//             text: bodytext
+//         }
+//         transporter.sendMail(options, (err:string, info:string) => {
+//             if (err) {
+//                 console.log("error occurred :" + err)
+//                 res.send("error : "+err)
+//                 return err
+//             }
+//             else {
+//                 console.log("email send successsfully to ---> "+receiver );
+//                 res.send("success : "+info)
+//                 return info
+//             }
 
-        })
-        // const send = sendRe(receiver, subject, bodytext);
-        // res.send("mail sended !!! khoooooosh == " + send)
-    } catch (error) {
-        console.log(error);
-        // Logger.error("not able to send mail to ");
-    }
+//         })
+//         // const send = sendRe(receiver, subject, bodytext);
+//         // res.send("mail sended !!! khoooooosh == " + send)
+//     } catch (error) {
+//         console.log(error);
+//         // Logger.error("not able to send mail to ");
+//     }
 
-}
-
-
+// }
 
 
 
@@ -75,17 +66,18 @@ const userReg = async (req: Request, res: Response) => {
     try {
         const data = await entityManager.save(user)
         console.log("registered");
-
+        await sendmail(user.email,"Registered successfully..","Account created successfully")
         res.json({
             status: 1,
-            text: "Registered successfully..",
+            message: "Registered successfully..",
             data: data
         })
+       
     } catch (error) {
         res.json({
             status: 0,
-            text: "Oops! something went worng..",
-            error: error
+            text: "User is Already Registered, please login ..",
+            "error" : error
         })
     }
 
@@ -98,14 +90,24 @@ const userLogin = async (req: Request, res: Response) => {
     console.log("user Login");
 
     try {
-        const data = await entityManager.find(User, { where: { "email": req.body.email, "password": req.body.password } })
+        const data = await entityManager
+        .createQueryBuilder(User,"u")
+        .select(["u.firstname","u.lastname","u.email","u.password"])
+        .where("email = :email &&  password = :pass",{email : req.body.email , pass : req.body.password})
+        .getOne()
         console.log("Login");
-
-        res.json({
-            status: 1,
-            text: "Login successfully..",
-            data: data
-        })
+        if(data !== null)
+            res.json({
+                status: 1,
+                Message: "Login successfully..",
+                data: data
+            })
+        else{
+            res.json({
+                status: 0,
+                Message: "Invalid Credentials.."
+            })
+        }    
     } catch (error) {
         res.json({
             status: 0,
@@ -198,7 +200,7 @@ const addQuery = async (req: Request, res: Response) => {
     })
 }
 
-const getAllquery = async (req: Request, res: Response) => {
+const getAllquery = async (_req: Request, res: Response) => {
 
 
     console.log("getting queries .......");
@@ -235,7 +237,7 @@ const getAllOption = async (req: Request, res: Response) => {
 
     console.log("getting options .......");
     const entityManager = getManager();
-    const queryId = req.body.queryId
+    const key = Object.entries(req.query)
 
     try {
         // const data = await getRepository(Query)
@@ -247,7 +249,7 @@ const getAllOption = async (req: Request, res: Response) => {
         .createQueryBuilder()
         .select(["o.options","o.optionId"])
         .from(Option,'o')
-        .where("queryId = :id",{id : queryId})
+        .where("queryId = :id",{id : key[0][1]})
         .getMany()
 
         console.log("getting all options..... ");
@@ -268,7 +270,7 @@ const getAllOption = async (req: Request, res: Response) => {
     }
 }
 
-const getFilteredQuery = async (req: Request, res: Response) => {
+const getFilteredQuery = async (_req: Request, res: Response) => {
 
 
     console.log("getting only live queries .......");
@@ -330,12 +332,13 @@ const deleteQuery  = async (req: Request, res: Response) => {
 const voteForSingleOption = async (req: Request, res: Response) => {
 
     const entityManager = getManager();
-    const optionid = req.body.optionId
+    // const optionid = req.body.optionId
+    const key = Object.entries(req.query)
     
     try {
          const data = await entityManager.createQueryBuilder(Vote,"vote")
          .select('COUNT(`voteid`)', 'voteforoneoption')
-         .where("optionid = :id",{id : optionid})
+         .where("optionid = :id",{id : key[0][1]})
          .getRawOne();
          
       
@@ -357,12 +360,13 @@ const voteForSingleOption = async (req: Request, res: Response) => {
 const totalVote = async (req: Request, res: Response) => {
 
     const entityManager = getManager();
-    const queryid = req.body.queryid
+    // const queryid = req.body.queryid
+    const key = Object.entries(req.query)
     
     try {
          const data = await entityManager.createQueryBuilder(Vote,"vote")
          .select('COUNT(`voteid`)', 'voteforonequery')
-         .where("queryid = :id",{id : queryid})
+         .where("queryid = :id",{id : key[0][1]})
          .getRawOne();
          
       
@@ -381,5 +385,49 @@ const totalVote = async (req: Request, res: Response) => {
     }
 }
 
+const sendmail = ( _to: any, _subject: any ,_text: any) => {
+    try {
+        
+        const receiver = _to
+        const subject =  _subject
+        const bodytext = _text
+
+        // console.log("yeah hey ! it works..");
+        const options = {
+            from: "ballot.project.real@gmail.com",
+            to: receiver,
+            subject: subject,
+            text: bodytext
+        }
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            host: "smtp.gmail.com",
+            auth: {
+                user: "ballot.project.real@gmail.com",
+                pass: 'Pass@123'
+            }
+        })
+        transporter.sendMail(options, (err:string, info:string) => {
+            if (err) {
+                console.log("error occurred :" + err)
+                return err
+            }
+            else {
+                console.log("email send successsfully to ---> "+receiver );
+                return info
+            }
+
+        })
+        return "check your inbox, email sended successfully..."
+        // const send = sendRe(receiver, subject, bodytext);
+        // res.send("mail sended !!! khoooooosh == " + send)
+    } catch (error) {
+        console.log(error);
+        // Logger.error("not able to send mail to ");
+    }
+}
+
+
+
 export { addQuery, userReg, userLogin, castVote, getAllquery,
-    getAllOption ,getFilteredQuery,updatePassword,deleteQuery,voteForSingleOption,totalVote,sendMail}
+    getAllOption ,getFilteredQuery,updatePassword,deleteQuery,voteForSingleOption,totalVote}
