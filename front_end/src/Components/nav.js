@@ -13,7 +13,7 @@ var Nav = (props) => {
   var pp = firstName.split("")[0].toUpperCase() + lastName.split("")[0].toUpperCase();
   return (
     <nav className="navbar-light fluid">
-      <div className="display">
+      <div className="display row">
         <div className="img-size"></div>
         <span className=" header">Ballot</span>
       </div>

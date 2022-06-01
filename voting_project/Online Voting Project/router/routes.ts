@@ -1,6 +1,6 @@
 import  express  from "express";
 import { addQuery, userLogin, userReg,getAllquery,getAllOption,updatePassword,
-    getFilteredQuery,deleteQuery,voteForSingleOption,totalVote,castVote } from "../controller/userController";
+    getFilteredQuery,deleteQuery,voteForSingleOption,totalVote,castVote,getIdList } from "../controller/userController";
 
 
 const router = express.Router()
@@ -21,6 +21,7 @@ router.delete("/deletequery", deleteQuery);
 // vote actions
 router.get("/voteforsingleoption", voteForSingleOption);
 router.get("/totalVote", totalVote);
+router.get("/getidlist", getIdList);
 router.post("/castvote", castVote);
 
 

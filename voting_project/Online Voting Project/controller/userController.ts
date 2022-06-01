@@ -1,6 +1,6 @@
 import { Request, Response, response } from 'express';
 
-import { getManager, getRepository, getTreeRepository, Equal, getCustomRepository, Timestamp } from "typeorm"
+import { getManager, getRepository, getTreeRepository, Equal, getCustomRepository, Timestamp, JoinColumn } from 'typeorm';
 import { User } from '../model/User';
 import { Query } from '../model/Query';
 import { Option } from '../model/Option';
@@ -65,25 +65,29 @@ const userReg = async (req: Request, res: Response) => {
     console.log("calling user Register");
     const entityManager = getManager()
 
-
+    console.log(req.body);
+    
     const user = new User()
-    user.firstname = req.body.firstname
-    user.lastname = req.body.lastname
+    user.firstname = req.body.firstName
+    user.lastname = req.body.lastName
     user.email = req.body.email
     user.password = req.body.password
 
     try {
-        const data = await entityManager.save(user)
+        const data = await entityManager.insert(User , user)
         console.log("registered");
-        await sendmail(user.email, "Registered successfully..", "Account created successfully")
-        res.json({
+        await sendmail(user.email, "Registered successfully..", `hi ${user.firstname},\nCongrajulations,
+        Your Account craeted successfully.\n\n\n\n...to access our services plaese login on http://localhost:3000/`)
+        res.send({
             status: 1,
             message: "Registered successfully..",
             data: data
         })
 
     } catch (error) {
-        res.json({
+        console.log(error);
+        
+        res.send({
             status: 0,
             text: "User is Already Registered, please login ..",
             "error": error
@@ -101,24 +105,24 @@ const userLogin = async (req: Request, res: Response) => {
     try {
         const data = await entityManager
             .createQueryBuilder(User, "u")
-            .select(["u.firstname", "u.lastname", "u.email", "u.password"])
+            .select(["u"])
             .where("email = :email &&  password = :pass", { email: req.body.email, pass: req.body.password })
             .getOne()
         console.log("Login");
         if (data !== null)
-            res.json({
+            res.send({
                 status: 1,
                 Message: "Login successfully..",
                 data: data
             })
         else {
-            res.json({
+            res.send({
                 status: 0,
                 Message: "Invalid Credentials.."
             })
         }
     } catch (error) {
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went worng..",
             error: error
@@ -138,13 +142,13 @@ const updatePassword = async (req: Request, res: Response) => {
         const data = await entityManager.update(User, { "email": given_email }, { "password": given_pass })
 
 
-        res.json({
+        res.send({
             status: 1,
             text: "password update successfully..",
             data: data
         })
     } catch (error) {
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went worng..",
             error: error
@@ -184,14 +188,14 @@ const castVote = async (req: Request, res: Response) => {
         await sendmail(email?.email, "Thanks for Voting", `hi ${email?.firstname}, \n 
         Your vote successfully submitted for Query id ${vote.queryId} - ${query?.queryname}.\n Thanks for Voting...`)
        
-            res.json({
+            res.send({
                 status: 1,
                 text: "Vote casted successfully..",
                 data: data
             })
 
      } catch (error) {
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went worng..",
             error: error
@@ -207,10 +211,10 @@ const addQuery = async (req: Request, res: Response) => {
     console.log(req.body);
 
     let qu = new Query();
-    qu.queryname = req.body.queryname
+    qu.queryname = req.body.queryName
     qu.userId = 1
     qu.queryStartDate = new Date()
-    qu.queryenddate = req.body.queryenddate
+    qu.queryenddate = req.body.queryEndDate
     const data = await entityManager.save(qu)
 
     const options = req.body.options
@@ -224,10 +228,10 @@ const addQuery = async (req: Request, res: Response) => {
         return saved;
     })
     
-    res.json({
+    res.send({
         "status": "one to many calling",
         "query": data,
-        "options": ooo
+        "options": options
 
     })
 }
@@ -243,20 +247,18 @@ const getAllquery = async (_req: Request, res: Response) => {
         //     .createQueryBuilder("query")
         //     .leftJoin("q.queryid","option")
         //     .getMany()
-
-        const data = await entityManager.find(Query)
-
-        console.log("getting all ..... ");
-
-
-        res.json({
+       const data =  await entityManager.createQueryBuilder(Query,"q")
+       .innerJoinAndSelect('q.options','options')
+       .getMany();
+        
+        res.send({
             status: 1,
-            text: "got all query successfully..",
+            message: "got all query successfully..",
             data: data
         })
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
@@ -274,7 +276,7 @@ const getAllOption = async (req: Request, res: Response) => {
 
     try {
 
-        const data = await entityManager
+        let data = await entityManager
             .createQueryBuilder()
             .select(["o.options", "o.optionId"])
             .from(Option, 'o')
@@ -282,17 +284,12 @@ const getAllOption = async (req: Request, res: Response) => {
             .getMany()
 
 
-        console.log("getting all options..... ");
 
+        res.send(data)
 
-        res.json({
-            status: 1,
-            text: "got all query successfully..",
-            data: data
-        })
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
@@ -317,14 +314,14 @@ const getFilteredQuery = async (_req: Request, res: Response) => {
         console.log("getting  live queries only..... ");
 
 
-        res.json({
+        res.send({
             status: 1,
             text: "got all query successfully..",
             data: data
         })
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
@@ -344,14 +341,14 @@ const deleteQuery = async (req: Request, res: Response) => {
             .createQueryBuilder().delete().from(Query).where("queryid = :id", { id: del_qid }).execute()
 
 
-        res.json({
+        res.send({
             status: 1,
             text: "query id[" + del_qid + "] deleted successfully..",
             data: data
         })
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
@@ -367,30 +364,123 @@ const voteForSingleOption = async (req: Request, res: Response) => {
 
     try {
         const data = await entityManager.createQueryBuilder(Vote, "vote")
-            .select('COUNT(`voteid`)', 'voteforoneoption')
+            .select('COUNT(`voteid`)', 'voteforsingleoption')
             .where("optionid = :id", { id: key[0][1] })
             .getRawOne();
 
 
-        res.json({
-            status: 1,
-            text: "total vote for one option..",
-            data: data
-        })
+        res.send(data)
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
         })
     }
 }
+const pages = async (req: Request, res: Response) => {
+
+
+
+    console.log("getting pages .......");
+
+
+
+    const entityManager = getManager();
+
+
+
+    const queryDetails = await getRepository(Query).createQueryBuilder('data')
+
+
+
+    try {
+
+        const data = await queryDetails
+
+
+
+            .orderBy("queryId", "ASC")
+
+
+
+            .limit(2)
+
+
+
+            .offset(0)
+
+
+
+            .getMany();
+
+
+
+        //...Enter more of your queries here... add relationships etc. THEN:
+
+
+
+        console.log("getting all ..... ");
+
+
+
+        res.json({
+
+
+
+            status: 1,
+
+
+
+            text: "got all  successfully..",
+
+
+
+            data: data
+
+
+
+        })
+
+
+
+    } catch (error) {
+
+
+
+        console.log(error)
+
+
+
+        res.json({
+
+
+
+            status: 0,
+
+
+
+            text: "Oops! something went wrong..",
+
+
+
+            error: error
+
+
+
+        })
+
+
+
+    }
+
+}
 
 const totalVote = async (req: Request, res: Response) => {
 
     const entityManager = getManager();
-    // const queryid = req.body.queryid
+    // const queryid = req.boFvdy.queryid
     const key = Object.entries(req.query)
 
     try {
@@ -400,14 +490,14 @@ const totalVote = async (req: Request, res: Response) => {
             .getRawOne();
 
 
-        res.json({
+        res.send({
             status: 1,
             text: "total vote for one option..",
             data: data
         })
     } catch (error) {
         console.log(error)
-        res.json({
+        res.send({
             status: 0,
             text: "Oops! something went wrong..",
             error: error
@@ -450,9 +540,36 @@ const sendmail = (_to: any, _subject: any, _text: any) => {
     }
 }
 
+const getIdList = async (req: Request, res: Response) => {
+
+    const entityManager = getManager();
+    // const queryid = req.body.queryid
+    const key = Object.entries(req.query)
+
+    try {
+        const data = await entityManager.createQueryBuilder(Vote, "vote")
+            .select('vote.queryId')
+            .where("userId = :id", { id: key[0][1] })
+            .getMany();
+
+
+        res.send({
+            status: 1,
+            data: data
+        })
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: 0,
+            text: "Oops! something went wrong..",
+            error: error
+        })
+    }
+}
+
 
 
 export {
     addQuery, userReg, userLogin, castVote, getAllquery,
-    getAllOption, getFilteredQuery, updatePassword, deleteQuery, voteForSingleOption, totalVote
+    getAllOption, getFilteredQuery, updatePassword, deleteQuery, voteForSingleOption, totalVote,getIdList
 }

@@ -1,5 +1,7 @@
 
-import { Entity,Column,PrimaryGeneratedColumn,BaseEntity } from "typeorm";
+import { query } from "express";
+import { Entity,Column,PrimaryGeneratedColumn,BaseEntity, ManyToOne } from "typeorm";
+import { Query } from "./Query";
 
 
 @Entity()
@@ -16,5 +18,7 @@ export class Vote extends BaseEntity {
 
     @Column({type:"int",name:"userId",nullable:false})
     userId:number | undefined
+
+   
 
 }

@@ -22,8 +22,25 @@
   float: right;
   margin-bottom: 1rem;
 }
+.inner_form_expired {
+  width: 80%;
+  background-color: rgb(197, 195, 195);
+  padding: 2rem;
+  float: right;
+  margin-bottom: 1rem;
+  opacity: 95%;
+  font-weight: 600;
+}
 .inner_form h3 {
   font-weight: 600;
+}
+.singleOption{
+  background-color:"#999999";
+  padding:"2px";
+  margin-top:"2px"
+}
+.singleOption:hover {
+  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 .p_inline_bar {
   /* for inline progress bar */

@@ -15,7 +15,7 @@ export class Option extends BaseEntity {
     @Column({type:"varchar",name:"options"})
     options:string | undefined
 
-    @ManyToOne(()=>Query,query=>query.options,{onDelete : "CASCADE"})
+    @ManyToOne(()=>Query,query=>query.options,{onDelete : "CASCADE",onUpdate:"CASCADE"})
     @JoinColumn({name:"queryId"})
     query : Query | undefined
 

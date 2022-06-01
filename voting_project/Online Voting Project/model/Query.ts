@@ -2,6 +2,7 @@
 import { Timestamp } from "mongodb";
 import { Entity,Column,PrimaryGeneratedColumn,BaseEntity, OneToMany } from "typeorm";
 import { Option } from "./Option";
+import { Vote } from "./Vote";
 
 @Entity()
 export class Query extends BaseEntity {
@@ -23,5 +24,8 @@ export class Query extends BaseEntity {
 
     @OneToMany(()=>Option,options => options.query)
     options : Option | undefined
+
+    // @OneToMany(()=>Vote,vote => vote.query)
+    // vote : Vote | undefined
 
 }

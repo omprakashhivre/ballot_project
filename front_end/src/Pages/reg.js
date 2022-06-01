@@ -31,29 +31,32 @@ var Reg = () => {
   };
   const onsubmit = async (e) => {
     e.preventDefault();
+    console.log(userreg);
     //validation part is here to be written
     try {
-        const pass_check = userreg.password === userreg.c_password ? true : false;
+        const pass_check = userreg.password == userreg.c_password ? true : false;
       if (pass_check) {
+        console.log("password matches");
         const record_with_id = { ...userreg, id: new Date().getTime().toString() };
         updaterecord([...records, record_with_id]);
         const requestOptions = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firstName: userreg.firstName, lastName: userreg.lastName, emailId: userreg.emailId, password: userreg.password }),
+          body: JSON.stringify({ firstName: userreg.firstName, lastName: userreg.lastName, email: userreg.emailId, password: userreg.password }),
         };
 
       const reg = await  fetch("http://localhost:5000/users/register", requestOptions)
           .then((response) => response.json())
-          .catch(data => alert(data));
+          .catch(xy => console.log(xy))
 
-          if(reg.success == 1)
+          if(reg.status === 1)
             { updateuserreg({ firstName: "", lastName: "", emailId: "", password: "", c_password: "" });
-              alert(reg.data)
+              // alert(reg.data)
+              console.log(reg.data);
               navigate("/");
             }
           else{
-            alert(reg.data)
+            console.log(reg.data)
           }  
 
       } else {

@@ -11,7 +11,7 @@ var Login = () => {
 
   const [inputClass, setInputClass] = useState()
   const [userreg, updateuserreg] = useState({
-    emailId: "",
+    email: "",
     password: "",
   });
   const [logindata, setlogindata] = useState({})
@@ -34,7 +34,7 @@ var Login = () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ emailId: e.target.emailId.value, password: e.target.password.value })
+      body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value })
     }
 
 
@@ -44,28 +44,25 @@ var Login = () => {
         return actualData
       })
 
-      console.log(response);
-    const respdata = response
+    console.log(response);
+    const respdata = response.data
     
 
 
 
 
-    if (respdata.success === 1) {
-
-      //storing data in local
-      console.log(respdata.data[0]);
-      const user = {userID : respdata.data[0].userId , emailId: respdata.data[0].emailId,
-        firstName : respdata.data[0].firstname , lastName: respdata.data[0].lastname}
-        console.log(user);
-      localStorage.setItem("userID" , respdata.data[0].userId);
-      localStorage.setItem("firstname" , respdata.data[0].firstName);
-      localStorage.setItem("lastname" , respdata.data[0].lastName);
+    if (response.status === 1) {
+      // const user = {userID : respdata.id , email: respdata.email,
+      //   firstName : respdata.firstname , lastName: respdata.lastname}
+      // console.log(user);
+      localStorage.setItem("userID" , respdata.id);
+      localStorage.setItem("firstname" , respdata.firstName);
+      localStorage.setItem("lastname" , respdata.lastName);
     
       
-      setlogindata(respdata.data[0])
-      console.log(logindata);
-      if (respdata.data[0].userId == 1)
+      setlogindata(respdata)
+      console.log(respdata);
+      if (respdata.id == 1)
         req();
       else
         navigate("/allframes");
@@ -86,7 +83,7 @@ var Login = () => {
         <Upperpart top_heading="Welcome! Again" heading="Login" bottom_heading="New here?" link="Register account" href="/reg" />
         <form action="#" onSubmit={onsubmit}>
           <div className="email-to-password" id="login_input">
-            <input type="email" placeholder="Email" required autoComplete="off" value={userreg.emailId} onChange={handleInput} name="emailId" className={inputClass} />
+            <input type="email" placeholder="Email" required autoComplete="off" value={userreg.email} onChange={handleInput} name="email" className={inputClass} />
 
             <input
               type="password"
