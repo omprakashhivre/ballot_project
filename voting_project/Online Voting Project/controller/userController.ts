@@ -306,9 +306,10 @@ const getFilteredQuery = async (_req: Request, res: Response) => {
     try {
         const data = await entityManager
             .createQueryBuilder()
-            .select(["q.queryname", "q.queryId", "q.queryEndDate"])
+            .select("q")
             .from(Query, 'q')
-            .where("queryenddate > :id", { id: new Date() })
+            .innerJoinAndSelect('q.options','options')
+            .where("q.queryenddate > :id", { id: new Date() })
             .getMany()
 
         console.log("getting  live queries only..... ");
@@ -553,10 +554,7 @@ const getIdList = async (req: Request, res: Response) => {
             .getMany();
 
 
-        res.send({
-            status: 1,
-            data: data
-        })
+        res.send(data)
     } catch (error) {
         console.log(error)
         res.send({

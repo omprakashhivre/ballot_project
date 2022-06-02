@@ -1,13 +1,9 @@
 import "./Ahomepage.css";
 import Button from "../UI/Button";
-import ReactPaginate from 'react-paginate'
 import Paginatnation from './Pagination'
 import { Link } from "react-router-dom";
-import ReactDOM from 'react-dom'
 import Nav from "../Components/nav";
 import Container from "@mui/material/Container";
-// import { useContext } from "react";
-// import { APIcontext } from "../API/APIProvider";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from 'react-confirm-alert';
@@ -131,7 +127,7 @@ const Ahomepage = ({ currentItems }) => {
     return (
       <>
         <Nav logedin="true" firstName="Admin" />
-        <div style={{ width: "1max", height: "50px", backgroundColor: "white", borderRadius: "20px" }}></div>
+        {/* <div style={{ width: "1max", height: "50px", backgroundColor: "white", borderRadius: "20px" }}></div> */}
         <form onSubmit={handleSubmit} className="Ahomepage_form">
           <Container className="reg" id="Outer_container">
             <div id="add_frame">
