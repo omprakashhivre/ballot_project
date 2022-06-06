@@ -21,6 +21,7 @@
   padding: 2rem;
   float: right;
   margin-bottom: 1rem;
+  font-family: Poppins;
 }
 .inner_form_expired {
   width: 80%;
@@ -29,7 +30,8 @@
   float: right;
   margin-bottom: 1rem;
   opacity: 95%;
-  font-weight: 600;
+  font-weight: bold;
+  
 }
 .inner_form h3 {
   font-weight: 600;

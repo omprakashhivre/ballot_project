@@ -1,6 +1,6 @@
 import  express  from "express";
 import { addQuery, userLogin, userReg,getAllquery,getAllOption,updatePassword,
-    getFilteredQuery,deleteQuery,voteForSingleOption,totalVote,castVote,getIdList } from "../controller/userController";
+    getFilteredQuery,deleteQuery,voteForSingleOption,totalVote,castVote,getIdList,Log } from "../controller/userController";
 
 
 const router = express.Router()
@@ -10,6 +10,7 @@ router.post("/register", userReg);
 router.post("/login", userLogin);
 // router.get("/getAllUsers", usersController.getAllUsers);
 router.put("/updatepassword", updatePassword);
+router.get("/log", Log);
 
 //query actions
 router.post("/addquery",addQuery)

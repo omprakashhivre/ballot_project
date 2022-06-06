@@ -56,8 +56,8 @@ var Login = () => {
       //   firstName : respdata.firstname , lastName: respdata.lastname}
       // console.log(user);
       localStorage.setItem("userID" , respdata.id);
-      localStorage.setItem("firstname" , respdata.firstName);
-      localStorage.setItem("lastname" , respdata.lastName);
+      localStorage.setItem("firstname" , respdata.firstname);
+      localStorage.setItem("lastname" , respdata.lastname);
     
       
       setlogindata(respdata)

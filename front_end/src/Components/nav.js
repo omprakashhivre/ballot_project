@@ -2,6 +2,7 @@ import "./nav.css";
 import { Link } from "react-router-dom";
 
 var Nav = (props) => {
+  var isAdmin = localStorage.getItem("userID") == 1 ? true : false;
   var logedin;
   var firstName;
   var lastName;
@@ -13,21 +14,32 @@ var Nav = (props) => {
   var pp = firstName.split("")[0].toUpperCase() + lastName.split("")[0].toUpperCase();
   return (
     <nav className="navbar-light fluid">
-      <div className="display row">
-        <div className="img-size"></div>
-        <span className=" header">Ballot</span>
-      </div>
+      {isAdmin ?
+        <Link to={'/homepage'}><div style={{ display: "inline-flex" }} >
+          <div className="img-size">
+          </div>
+          <span className=" header">Ballot</span>
+        </div>
+        </Link> :
+        <Link to={'/allframes'}><div style={{ display: "inline-flex" }} >
+          <div className="img-size">
+          </div>
+          <span className=" header">Ballot</span>
+        </div>
+        </Link>
+      }
+    
       {logedin ? (
         <div id="imgSpan_wrap">
-          {ishomepage ? (
+          {/* {ishomepage ? (
             <Link to={props.homepage[1]} className="logoutSpan">
               {props.homepage[0]}
             </Link>
           ) : (
             <span></span>
-          )}
+          )} */}
           <span id="profile_pic">{pp}</span>
-          <Link to={"/"} className="logoutSpan" onClick={()=>{localStorage.clear()}}>
+          <Link to={"/"} className="logoutSpan" onClick={() => { localStorage.clear() }}>
             <span>logout</span>
           </Link>
         </div>

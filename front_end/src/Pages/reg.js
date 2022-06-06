@@ -80,6 +80,16 @@ var Reg = () => {
           </div>
           <div className="email-to-password">
             <input type="email" placeholder="Email" required autoComplete="off" value={userreg.emailId} onChange={handleInput} name="emailId" />
+            {/* <Button text='Send Otp' onC
+            {
+              <imput type='number' min={1} max={7} required  />
+              isOtpREceived ? <Button text="Verify Otp" display="block" />
+               : <Button text="Resend" display="block" />
+            } */}
+            
+            
+
+
             <input type="password" placeholder="Password" required autoComplete="off" value={userreg.password} onChange={handleInput} name="password" className={invalid} min="8" />
             <input
               type="password"
@@ -92,6 +102,7 @@ var Reg = () => {
               className={invalid}
             // style={{c_password_error}}
             />
+
             <p style={{ color: "red", fontSize: "20px", display: `${invalid ? '' : 'none'}` }}>password and conform password must match</p>
           </div>
           <Button text="Create account" display="none" />

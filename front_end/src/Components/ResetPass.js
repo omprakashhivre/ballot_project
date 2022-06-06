@@ -3,7 +3,9 @@ import { useState } from "react";
 import Button from "../UI/Button";
 import '../Pages/reg.css'
 import { useNavigate } from "react-router-dom";
-
+//toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ResetPass = ({emailId}) => {
   let navigate = useNavigate();
@@ -19,7 +21,7 @@ export const ResetPass = ({emailId}) => {
     const requestOptions = {
       method: "put",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ emailId: emailId , password: e.target.password.value })
+      body: JSON.stringify({ email: emailId , password: e.target.password.value })
     }
 
       const response = await fetch('http://localhost:5000/users/updatepassword', requestOptions)
@@ -30,15 +32,31 @@ export const ResetPass = ({emailId}) => {
 
       const respdata = response
       console.log(respdata); 
-      if (respdata.success === 1) {
-        alert(emailId + " password updated succesfully")
+      if (respdata.status === 1) {
+        toast.success('Password Updated Successfully..', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
         setTimeout(function() {
           navigate("/");
       
       }, 500)
       }
       else {
-        alert("email not updated")
+        toast.error('Unable to update Password', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
         setInvalid('invalid')
       }
     }
@@ -56,6 +74,17 @@ export const ResetPass = ({emailId}) => {
         <p style={{color:"red",fontSize:"20px",display:`${invalid ? "block" : "none"}`}}>something goes wrong</p>
         <Button text="Update Password">Update Password</Button>
     </form>
+    <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

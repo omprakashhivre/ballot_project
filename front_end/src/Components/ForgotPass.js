@@ -9,6 +9,9 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import "../UI/Button.css";
 // import {  useNavigate } from "react-router-dom";
+//toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 var ForgotPass = () => {
   const [otpsends, setotpsends] = useState(false);
@@ -26,23 +29,21 @@ var ForgotPass = () => {
     const value = e.target.value;
     updateuserreg({ ...userreg, [name]: value });
   };
-  // let navigate = useNavigate();
-  // function req() {
-  //   navigate("/");
-  // }
-  // const onsubmit = (e) => {
-  //   e.preventDefault();
-  //   //validation part is here to be written
-  //   updateuserreg({ email: "", password: "" });
-  //   console.log(userreg);
-  //   //req();
-  // };
-  const sendOtp = (givenemail) => {
+  
+  const sendOtp = async (givenemail) => {
     const newotp = Math.floor(Math.random() * 1000000);
     setotp(newotp);
     setemailId(givenemail)
     console.log(otp + " == " + newotp + " " + givenemail);
     try {
+      const user = await  fetch("http://localhost:5000/users/log?email="+givenemail)
+          .then((response) => response.json())
+          .catch(xy => console.log(xy))
+          console.log(user);
+          if(user.id == null)
+            throw new Error("email not rergistered. Kindly Register...");
+
+
       emailjs
         .send(
           "service_ukgndsq",
@@ -55,20 +56,52 @@ var ForgotPass = () => {
         )
         .then(function (res) {
           console.log("status " + res.status);
-          alert("OTP send");
+          toast.success('OTP send successfully on email -  '+givenemail, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
           setotpsends(true);
           document.getElementById("otpbutton").style.display = "none";
         });
     } catch (error) {
-      alert("not able to send OTP check email and try again ", error);
+      toast.warn('not able to send OTP Because, '+ error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
     }
   };
 
   const verifyOtp = (otpgot) => {
     if (otp == otpgot) {
-      alert(otp + " -- >otp matches");
+      // toast.success('Otp Matches please ', {
+      //   position: "bottom-right",
+      //   autoClose: 2000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // })
       setverifyotp(true);
-    } else alert("invalid otp");
+    } else toast.warn('Unable to update Password', {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
   };
   return (
     <>
@@ -121,6 +154,17 @@ var ForgotPass = () => {
           </div>
         </>
       </Container>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

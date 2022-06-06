@@ -215,7 +215,9 @@ const addQuery = async (req: Request, res: Response) => {
     qu.userId = 1
     qu.queryStartDate = new Date()
     qu.queryenddate = req.body.queryEndDate
-    const data = await entityManager.save(qu)
+
+    try {
+        const data = await entityManager.insert(Query,qu)
 
     const options = req.body.options
     // [1,2,3] 
@@ -223,17 +225,25 @@ const addQuery = async (req: Request, res: Response) => {
         let op = new Option();
         op.options = option
         op.query = qu
-        const saved = await entityManager.save(op)
+        const saved = await entityManager.insert(Option , op)
         console.log(saved);
         return saved;
-    })
-    
+    })    
     res.send({
         "status": "one to many calling",
         "query": data,
         "options": options
-
     })
+        
+    } catch (error) {
+        console.log(error);
+        res.send({
+            "status": 0,
+            "message" : "ohhhhhho! Error came...."
+        })
+        
+    }
+    
 }
 
 const getAllquery = async (_req: Request, res: Response) => {
@@ -565,9 +575,32 @@ const getIdList = async (req: Request, res: Response) => {
     }
 }
 
+const Log =  async (req: Request, res: Response) => {
+
+    const entityManager = getManager();
+    const key = Object.entries(req.query)
+    console.log(key);
+    
+    try {
+        const data = await entityManager.createQueryBuilder(User, "vote")
+        .select('vote.id')
+        .where("email = :id", { id: key[0][1] })
+        .getOne();
+        
+        res.send( data)
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: 0,
+            text: "No such user found ...... ",
+            error: error
+        })
+    }
+}
+
 
 
 export {
     addQuery, userReg, userLogin, castVote, getAllquery,
-    getAllOption, getFilteredQuery, updatePassword, deleteQuery, voteForSingleOption, totalVote,getIdList
+    getAllOption, getFilteredQuery, updatePassword, deleteQuery, voteForSingleOption, totalVote,getIdList,Log
 }

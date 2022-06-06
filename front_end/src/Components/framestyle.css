@@ -39,7 +39,7 @@ input[type="radio"]:checked:after {
   top: -2px;
   left: -1px;
   position: relative;
-  background-color: #03d5f1;
+  background-color: #2004f7;
   content: "";
   display: inline-block;
   visibility: visible;
@@ -57,6 +57,7 @@ input[type="radio"]:checked:after {
   color: #20202a;
 }
 .button-btn {
+  margin-top: 10px;
   width: 18.125rem;
   height: 4.25rem;
   background: #0029fe;
