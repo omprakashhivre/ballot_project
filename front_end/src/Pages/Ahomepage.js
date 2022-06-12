@@ -13,16 +13,10 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import LoadingSpinner from "../Components/LoadingSpinner";
 import '../Components/spinner.css'
-import { confirm } from "react-confirm-box";
-import { style } from "@mui/system";
-
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-// import { ButtonGroup } from "@mui/material";
 
 //toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {Overlay} from './Overlay'
 
 
 const Ahomepage = ({ currentItems }) => {
@@ -41,7 +35,6 @@ const Ahomepage = ({ currentItems }) => {
 
 
   const [loading, setLoading] = useState(false)
-  const [selected, setSelected] = useState()
   const [frame, setFrame] = useState([])
   const [fframe, setFFrame] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
@@ -135,13 +128,7 @@ const Ahomepage = ({ currentItems }) => {
     setFrame(frame.filter((fr) => { if (fr.id != id) return fr }));
     setFFrame(fframe.filter((fr) => { if (fr.id != id) return fr }));
   };
-
-
-
-
-
-
-
+  
   //login pagination
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -167,12 +154,11 @@ const Ahomepage = ({ currentItems }) => {
     }
     else if (e === 'c') {
       console.log("expires")
-      // console.log(fframe);
       setFFrame(frame.filter(function (fr) { return (new Date(fr.endDate) <= new Date()) }))
-      // console.log(fframe)
+   
     }
     else if (e === "10" || e === "5" || e === "3" || e === "2") {
-      console.log(localStorage.getItem("userID"));
+      console.log(e);
       setPostsPerPage(e)
     }
 
@@ -228,7 +214,7 @@ const Ahomepage = ({ currentItems }) => {
 
                           <div className={isexpired ? "inner_form_expired" : "inner_form"} key={currElem.id}>
                             <h3>{index + 1}) {currElem.query}</h3>
-                            <Overlay />
+                            {/* <Overlay /> */}
                             
                             <div style={{ borderRadius: "10px", padding: "10px", backgroundColor: "#d5d6f2" }}>
                               {currElem.option.map((curr, index) => {
@@ -266,15 +252,15 @@ const Ahomepage = ({ currentItems }) => {
                                   alt="delete"
                                   onClick={() => {
                                     const options = {
-                                      title: 'Delete',
-                                      message: 'Are you really want to delete this Frame',
+                                      title: 'Delete Frame',
+                                      message: `${currElem.query}`,
                                       buttons: [
                                         {
-                                          label: 'Yes',
-                                          onClick: () => removeFrame(currElem.id)
+                                          label: 'Delete',
+                                          onClick: () => removeFrame(currElem.id ),
                                         },
                                         {
-                                          label: 'No',
+                                          label: 'Cancel',
                                           onClick: () => console.log("delete operation cancelled")
                                         }
                                       ],
@@ -302,7 +288,10 @@ const Ahomepage = ({ currentItems }) => {
 
 
       </form>
-      <Paginatnation postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} />
+            {
+              (currentPosts.length === fframe.length) ? '' :
+              <Paginatnation postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} />
+            }
       <ToastContainer
         position="bottom-right"
         autoClose={2000}

@@ -6,6 +6,10 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+//toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 var Reg = () => {
   const [invalid, setInvalid] = useState();
   let navigate = useNavigate();
@@ -53,6 +57,15 @@ var Reg = () => {
             { updateuserreg({ firstName: "", lastName: "", emailId: "", password: "", c_password: "" });
               // alert(reg.data)
               console.log(reg.data);
+              toast.success(`Registered Successfully, please Login`, {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
               navigate("/");
             }
           else{
@@ -61,11 +74,29 @@ var Reg = () => {
 
       } else {
         setInvalid('invalid')
+        toast.warn('Passsword not matches', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
       
         
     } catch (error) {
-      alert("something went wrong "+error)
+      // alert("something went wrong "+error)
+      toast.error('Error : '+error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
   return (
@@ -108,6 +139,17 @@ var Reg = () => {
           <Button text="Create account" display="none" />
         </form>
       </Container>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

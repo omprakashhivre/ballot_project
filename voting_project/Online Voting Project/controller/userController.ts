@@ -516,40 +516,7 @@ const totalVote = async (req: Request, res: Response) => {
     }
 }
 
-const sendmail = (_to: any, _subject: any, _text: any) => {
-    try {
 
-        const receiver = _to
-        const subject = _subject
-        const bodytext = _text
-
-        // console.log("yeah hey ! it works..");
-        const options = {
-            from: "ballot.project.real@gmail.com",
-            to: receiver,
-            subject: subject,
-            text: bodytext
-        }
-       
-        transporter.sendMail(options, (err: string, info: string) => {
-            if (err) {
-                console.log("error occurred :" + err)
-                return err
-            }
-            else {
-                console.log("email send successsfully to ---> " + receiver);
-                return info
-            }
-
-        })
-        return "check your inbox, email sended successfully..."
-        // const send = sendRe(receiver, subject, bodytext);
-        // res.send("mail sended !!! khoooooosh == " + send)
-    } catch (error) {
-        console.log(error);
-        // Logger.error("not able to send mail to ");
-    }
-}
 
 const getIdList = async (req: Request, res: Response) => {
 
@@ -595,6 +562,42 @@ const Log =  async (req: Request, res: Response) => {
             text: "No such user found ...... ",
             error: error
         })
+    }
+}
+
+const sendmail = (_to: any, _subject: any, _text: any) => {
+    try {
+
+        const receiver = _to
+        const subject = _subject
+        const bodytext = _text
+
+        // console.log("yeah hey ! it works..");
+        const options = {
+            from: "ballot.project.real@gmail.com",
+            to: receiver,
+            subject: subject,
+            text: bodytext
+        }
+       
+        transporter.sendMail(options, (err: string, info: string) => {
+            if (err) {
+                console.log("error occurred :" + err)
+                return err
+            }
+            else {
+                console.log("email send successsfully to ---> " + receiver);
+                return info
+            }
+
+        })
+        return "check your inbox, email sended successfully..."
+        // const send = sendRe(receiver, subject, bodytext);
+        // res.send("mail sended !!! khoooooosh == " + send)
+    } catch (error) {
+        console.log(error);
+        return 'Something went wrong : '+error
+        // Logger.error("not able to send mail to ");
     }
 }
 

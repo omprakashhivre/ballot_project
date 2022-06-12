@@ -3,7 +3,6 @@ import "../Pages/Ahomepage.css";
 import Container from "@mui/material/Container";
 import { useState } from 'react'
 export const Frame = ({ vote, setVote, index }) => {
-  console.log(vote);
   const [timer, setTimer] = useState('')
   const [frameExpired, setFrameExpired] = useState(false)
 
@@ -52,7 +51,7 @@ export const Frame = ({ vote, setVote, index }) => {
         <h3>{index + 1}) {vote.query}</h3>
         {
           vote.isUserVoted ? "" :
-            <h4 style={{ color: "red", textAlign: "center", marginTop: "5rem", fontFamily: "Poppins", fontWeight: "bold", textAlign: "right", marginTop: "0%" }}>Time left : {"xx"}</h4>
+            <h4 style={{ color: "red", textAlign: "center", marginTop: "5rem", fontFamily: "Poppins", fontWeight: "bold", textAlign: "right", marginTop: "0%" }}>Time left : {timer}</h4>
         }
         <div style={{ borderRadius: "10px", padding: "10px", backgroundColor: "#d5d6f2" }}>
 

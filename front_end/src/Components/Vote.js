@@ -7,6 +7,7 @@ import { useState } from 'react'
 import LoadingSpinner from "./LoadingSpinner";
 import Container from "@mui/material/Container";
 import '../Pages/Ahomepage.css'
+import Pagination from "../Pages/Pagination";
 
 //toastify
 import { ToastContainer, toast } from 'react-toastify';
@@ -32,6 +33,9 @@ const Vote = () => {
   const local_userId = localStorage.getItem("userID")
   const [frame, setFrame] = useState([])
   const [isLoading, setIsLoading] = useState(false);
+  const [fframe, setFFrame] = useState([])
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(2);
 
 
   const getallQuery = async () => {
@@ -44,10 +48,6 @@ const Vote = () => {
       .then((actualData) => {
         return actualData
       })
-
-    console.log(idlist);
-
-
     console.log("getAllQuery called");
     var allQuery = await fetch("http://localhost:5000/users/getfilteredquery")
       .then((resp) => resp.json())
@@ -94,14 +94,15 @@ const Vote = () => {
       array.push(q)
       return null;
     })
-    console.log(array);
+    // console.log(array);
     array.sort((a, b) => new Date(a.startDate) < new Date(b.startDate) ? 1 : -1)
 
     setTimeout(() => {
       setFrame(array)
+      setFFrame(array)
       setIsLoading(false)
     }, 1000)
-    console.log(array)
+    // console.log(array)
 
 
   }
@@ -131,9 +132,15 @@ const Vote = () => {
     e.preventDefault();
   };
 
+  //pagination 
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  let currentPosts = (fframe.slice(indexOfFirstPost, indexOfLastPost))
+
   return (
     <>
-      <Nav logedin="" firstName={localStorage.getItem("firstname") || "xx"} lastName={localStorage.getItem("lastname") || "xx"} />
+      <Nav logedin="" firstName={localStorage.getItem("firstname") || "X"} lastName={localStorage.getItem("lastname") || "X"}/>
 
       <form onSubmit={handleSubmit} className="Ahomepage_form">
         <Container className="reg" id="Outer_container">
@@ -144,12 +151,12 @@ const Vote = () => {
                 <>
                   {
                     frame.length > 0 ?
-                      frame.map((vote, index) => {
+                      currentPosts.map((vote, index) => {
                         if (new Date(vote.endDate) > new Date())
                           return <Frame key={vote.id} index={index} vote={vote} setVote={setVote} />
 
                       }
-                      ) : <h2 style={{ color: "red", textAlign: "center", marginTop: "5rem" }}>currently no active ballots for vote...</h2>
+                      ) : <h2 style={{ color: "red", textAlign: "center", marginTop: "5rem" , fontFamily:"Poppins" }}>currently no active ballots for vote...</h2>
                   }
                 </>
 
@@ -157,6 +164,14 @@ const Vote = () => {
           </Container>
         </Container>
       </form>
+      {
+       fframe.length !== currentPosts.length ?
+        <Pagination postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} /> :
+        <></>
+
+      }
+      
+
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
