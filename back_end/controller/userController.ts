@@ -18,49 +18,6 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-
-// const sendMail =  (req:Request, res:Response) => {
-//     const to = req.body.to
-//     const sub = req.body.subject
-//     const body = req.body.text
-
-//     try {
-
-//         const receiver = to
-//         const subject =  sub
-//         const bodytext = body
-
-//         console.log("yeah hey ! it works..");
-//         const options = {
-//             from: "xcaliusomg@gmail.com",
-//             to: receiver,
-//             subject: subject,
-//             text: bodytext
-//         }
-//         transporter.sendMail(options, (err:string, info:string) => {
-//             if (err) {
-//                 console.log("error occurred :" + err)
-//                 res.send("error : "+err)
-//                 return err
-//             }
-//             else {
-//                 console.log("email send successsfully to ---> "+receiver );
-//                 res.send("success : "+info)
-//                 return info
-//             }
-
-//         })
-//         // const send = sendRe(receiver, subject, bodytext);
-//         // res.send("mail sended !!! khoooooosh == " + send)
-//     } catch (error) {
-//         console.log(error);
-//         // Logger.error("not able to send mail to ");
-//     }
-
-// }
-
-
-
 const userReg = async (req: Request, res: Response) => {
     console.log("calling user Register");
     const entityManager = getManager()
@@ -515,8 +472,6 @@ const totalVote = async (req: Request, res: Response) => {
         })
     }
 }
-
-
 
 const getIdList = async (req: Request, res: Response) => {
 
