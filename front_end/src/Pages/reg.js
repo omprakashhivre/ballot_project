@@ -49,7 +49,7 @@ var Reg = () => {
           body: JSON.stringify({ firstName: userreg.firstName, lastName: userreg.lastName, email: userreg.emailId, password: userreg.password }),
         };
 
-      const reg = await  fetch("http://localhost:5000/users/register", requestOptions)
+      const reg = await  fetch("http://3.6.191.95:3000/users/register", requestOptions)
           .then((response) => response.json())
           .catch(xy => console.log(xy))
 

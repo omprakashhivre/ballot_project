@@ -44,7 +44,7 @@ const Ahomepage = ({ currentItems }) => {
 
     setLoading(true)
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://localhost:5000/users/getAllquery")
+    var allQuery = await fetch("http://3.6.191.95:3000/users/getAllquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -70,7 +70,7 @@ const Ahomepage = ({ currentItems }) => {
         const optionName = singleoption.options
         let firstOption = { "optionId": oid, "optionName": singleoption.options }
 
-        const votes = await fetch("http://localhost:5000/users/voteforsingleoption?optionId=" + oid)
+        const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionId=" + oid)
           .then((resp) => resp.json())
           .then((actualData) => {
             return actualData
@@ -111,7 +111,7 @@ const Ahomepage = ({ currentItems }) => {
   };
 
   const removeFrame = async (id) => {
-    await fetch("http://localhost:5000/users/deletequery", {
+    await fetch("http://3.6.191.95:3000/users/deletequery", {
       method: "delete",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ queryId: id })

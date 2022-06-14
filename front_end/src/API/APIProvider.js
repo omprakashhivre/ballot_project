@@ -17,7 +17,7 @@
 //     setIsLoading(true)
 
 //     console.log("getAllQuery called");
-//     var allQuery = await fetch("http://localhost:5000/users/getAllquery")
+//     var allQuery = await fetch("http://3.6.191.95:3000/users/getAllquery")
 //       .then((resp) => resp.json())
 //       .then((actualData) => {
 //         return actualData
@@ -42,7 +42,7 @@
 //         const optionname = singleoption.options
 //         let firstOption = { "optionId": oid , "optionName": singleoption.options }
 
-//         const votes = await fetch("http://localhost:5000/users/voteforsingleoption?optionid=" + oid)
+//         const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionid=" + oid)
 //         console.log(votes);
 
 //         q = { ...q, "option" : [...option ,{optionId : oid , options : optionname , "totalvote" : votes.data.voteforoneoption }]}
