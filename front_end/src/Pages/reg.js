@@ -14,7 +14,7 @@ var Reg = () => {
   const [invalid, setInvalid] = useState();
   let navigate = useNavigate();
   // const  [c_password_error, updateC_password_error] = useState("");
-  const [userreg, updateuserreg] = useState({
+  const [userReg, updateuserReg] = useState({
     fistName: "",
     lastName: "",
     emailId: "",
@@ -22,31 +22,31 @@ var Reg = () => {
     c_password: "",
   });
 
-  const [records, updaterecord] = useState([]);
+  const [records, updateRecord] = useState([]);
 
   const handleInput = (e) => {
     //checking of imput is here to pe written
     const name = e.target.name;
     const value = e.target.value;
     console.log(name + " === " + value);
-    updateuserreg({ ...userreg, [name]: value });
-    console.log(userreg);
-    // console.log(userreg);
+    updateuserReg({ ...userReg, [name]: value });
+    console.log(userReg);
+    // console.log(userReg);
   };
   const onsubmit = async (e) => {
     e.preventDefault();
-    console.log(userreg);
+    console.log(userReg);
     //validation part is here to be written
     try {
-        const pass_check = userreg.password == userreg.c_password ? true : false;
+        const pass_check = userReg.password == userReg.c_password ? true : false;
       if (pass_check) {
         console.log("password matches");
-        const record_with_id = { ...userreg, id: new Date().getTime().toString() };
-        updaterecord([...records, record_with_id]);
+        const record_with_id = { ...userReg, id: new Date().getTime().toString() };
+        updateRecord([...records, record_with_id]);
         const requestOptions = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firstName: userreg.firstName, lastName: userreg.lastName, email: userreg.emailId, password: userreg.password }),
+          body: JSON.stringify({ firstName: userReg.firstName, lastName: userReg.lastName, email: userReg.emailId, password: userReg.password }),
         };
 
       const reg = await  fetch("http://3.6.191.95:4000/users/register", requestOptions)
@@ -54,7 +54,7 @@ var Reg = () => {
           .catch(xy => console.log(xy))
 
           if(reg.status === 1)
-            { updateuserreg({ firstName: "", lastName: "", emailId: "", password: "", c_password: "" });
+            { updateuserReg({ firstName: "", lastName: "", emailId: "", password: "", c_password: "" });
               // alert(reg.data)
               console.log(reg.data);
               toast.success(`Registered Successfully, please Login`, {
@@ -87,7 +87,6 @@ var Reg = () => {
       
         
     } catch (error) {
-      // alert("something went wrong "+error)
       toast.error('Error : '+error, {
         position: "bottom-right",
         autoClose: 2000,
@@ -106,11 +105,11 @@ var Reg = () => {
         <Upperpart top_heading="Start for free" heading="Create new account" bottom_heading="Already a member?" link="LogIn" href="/" />
         <form action="#" onSubmit={onsubmit}>
           <div className="Initals">
-            <input type="text" placeholder="First name" required autoComplete="off" value={userreg.firstName} onChange={handleInput} name="firstName" />
-            <input type="text" placeholder="Last name" required autoComplete="off" value={userreg.lastName} onChange={handleInput} name="lastName" />
+            <input type="text" placeholder="First name" required autoComplete="off" value={userReg.firstName} onChange={handleInput} name="firstName" />
+            <input type="text" placeholder="Last name" required autoComplete="off" value={userReg.lastName} onChange={handleInput} name="lastName" />
           </div>
           <div className="email-to-password">
-            <input type="email" placeholder="Email" required autoComplete="off" value={userreg.emailId} onChange={handleInput} name="emailId" />
+            <input type="email" placeholder="Email" required autoComplete="off" value={userReg.emailId} onChange={handleInput} name="emailId" />
             {/* <Button text='Send Otp' onC
             {
               <imput type='number' min={1} max={7} required  />
@@ -121,13 +120,13 @@ var Reg = () => {
             
 
 
-            <input type="password" placeholder="Password" required autoComplete="off" value={userreg.password} onChange={handleInput} name="password" className={invalid} min="8" />
+            <input type="password" placeholder="Password" required autoComplete="off" value={userReg.password} onChange={handleInput} name="password" className={invalid} min="8" />
             <input
               type="password"
               placeholder="Confirm Password"
               autoComplete="off"
               required
-              value={userreg.c_password}
+              value={userReg.c_password}
               onChange={handleInput}
               name="c_password"
               className={invalid}

@@ -10,18 +10,18 @@ import { useNavigate } from "react-router-dom";
 var Login = () => {
 
   const [inputClass, setInputClass] = useState()
-  const [userreg, updateuserreg] = useState({
+  const [UserReg, updateUserReg] = useState({
     email: "",
     password: "",
   });
-  const [logindata, setlogindata] = useState({})
+  const [logindata, setLoginData] = useState({})
 
 
   const handleInput = (e) => {
     //checking of imput is here to pe written
     const name = e.target.name;
     const value = e.target.value;
-    updateuserreg({ ...userreg, [name]: value });
+    updateUserReg({ ...UserReg, [name]: value });
   };
   let navigate = useNavigate();
   function req() {
@@ -60,7 +60,7 @@ var Login = () => {
       localStorage.setItem("lastname" , respdata.lastname);
     
       
-      setlogindata(respdata)
+      setLoginData(respdata)
       console.log(respdata);
       if (respdata.id == 1)
         req();
@@ -68,7 +68,7 @@ var Login = () => {
         navigate("/allframes");
     }
     else {
-      setlogindata(respdata)
+      setLoginData(respdata)
       setInputClass("invalid")
     }
 
@@ -83,14 +83,14 @@ var Login = () => {
         <Upperpart top_heading="Welcome! Again" heading="Login" bottom_heading="New here?" link="Register account" href="/reg" />
         <form action="#" onSubmit={onsubmit}>
           <div className="email-to-password" id="login_input">
-            <input type="email" placeholder="Email" required autoComplete="off" value={userreg.email} onChange={handleInput} name="email" className={inputClass} />
+            <input type="email" placeholder="Email" required autoComplete="off" value={UserReg.email} onChange={handleInput} name="email" className={inputClass} />
 
             <input
               type="password"
               placeholder="Password"
               required
               autoComplete="off"
-              value={userreg.password}
+              value={UserReg.password}
               onChange={handleInput}
               name="password"
               className={inputClass}

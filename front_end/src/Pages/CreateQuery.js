@@ -9,23 +9,15 @@ import { useNavigate } from "react-router-dom";
 //toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import styled from "@emotion/styled";
-
-
-// import { useNavigate } from "react-router-dom";
 
 const CreateQuery = () => {
   let navigate = useNavigate();
   const [options, addOptions] = useState([1, 2]);
-  const [query_firstname, setquery_firstname] = useState('');
-  const [query, setQuery] = useState({
-    queryName: "",
-    queryStartDate: "",
-    queryEndDate: "",
-  });
+  const [QueryFirstname, setQueryFirstname] = useState('');
+
 
   const handleChange = (e) => {
-    setquery_firstname(e.target.value)
+    setQueryFirstname(e.target.value)
   }
 
   const fetchFunction = async (query) => {
@@ -123,7 +115,7 @@ const CreateQuery = () => {
 
           <input type="text" placeholder="Input your question here" id="query" required autoComplete="off" name="firstname" max={500} onChange={handleChange} />
           <div className="styled">
-            <p>{query_firstname}</p>
+            <p>{QueryFirstname}</p>
           </div>
 
           <p>

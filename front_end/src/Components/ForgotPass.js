@@ -8,15 +8,15 @@ import Container from "@mui/material/Container";
 // import { Link } from "react-router-dom";
 import { useState } from "react";
 import "../UI/Button.css";
-// import {  useNavigate } from "react-router-dom";
+ 
 //toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 var ForgotPass = () => {
-  const [otpsends, setotpsends] = useState(false);
+  const [otpsends, setOtpsends] = useState(false);
   const [verifyotp, setverifyotp] = useState(false);
-  const [otp, setotp] = useState(0);
+  const [otp, setOtp] = useState(0);
   const [emailId, setemailId] = useState("");
 
   const [userreg, updateuserreg] = useState({
@@ -30,13 +30,13 @@ var ForgotPass = () => {
     updateuserreg({ ...userreg, [name]: value });
   };
   
-  const sendOtp = async (givenemail) => {
-    const newotp = Math.floor(Math.random() * 1000000);
-    setotp(newotp);
-    setemailId(givenemail)
-    console.log(otp + " == " + newotp + " " + givenemail);
+  const sendOtp = async (givenEmail) => {
+    const newOtp = Math.floor(Math.random() * 1000000);
+    setOtp(newOtp);
+    setemailId(givenEmail)
+    console.log(otp + " == " + newOtp + " " + givenEmail);
     try {
-      const user = await  fetch("http://3.6.191.95:4000/users/log?email="+givenemail)
+      const user = await  fetch("http://3.6.191.95:4000/users/log?email="+givenEmail)
           .then((response) => response.json())
           .catch(xy => console.log(xy))
           console.log(user);
@@ -49,14 +49,14 @@ var ForgotPass = () => {
           "service_ukgndsq",
           "template_k8qpx17",
           {
-            message: newotp,
-            to_email: givenemail,
+            message: newOtp,
+            to_email: givenEmail,
           },
           "user_NDtOXp78ookGeIZN8R3ie"
         )
         .then(function (res) {
-          console.log("status " + res.status);
-          toast.success('OTP send successfully on email -  '+givenemail, {
+          // console.log("status " + res.status);
+          toast.success('OTP send successfully on email -  '+givenEmail, {
             position: "bottom-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -65,7 +65,7 @@ var ForgotPass = () => {
             draggable: true,
             progress: undefined,
           })
-          setotpsends(true);
+          setOtpsends(true);
           document.getElementById("otpbutton").style.display = "none";
         });
     } catch (error) {
@@ -83,17 +83,17 @@ var ForgotPass = () => {
 
   const verifyOtp = (otpgot) => {
     if (otp == otpgot) {
-      // toast.success('Otp Matches please ', {
-      //   position: "bottom-right",
-      //   autoClose: 2000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      // })
+      toast.success('Otp Matches ', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
       setverifyotp(true);
-    } else toast.warn('Unable to update Password', {
+    } else toast.warn('Invalid OTP', {
       position: "bottom-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -120,9 +120,9 @@ var ForgotPass = () => {
                 onChange={handleInput}
                 name="email"
                 style={{ width: "auto", marginBottom: "20px" }}
-                id="givenemail"
+                id="givenEmail"
               />
-              <button className="reg_submit" onClick={() => sendOtp(document.getElementById("givenemail").value)} id="otpbutton">
+              <button className="reg_submit" onClick={() => sendOtp(document.getElementById("givenEmail").value)} id="otpbutton">
                 Send Otp
               </button>
             </div>

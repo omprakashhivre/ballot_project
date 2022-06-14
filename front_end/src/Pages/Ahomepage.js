@@ -84,11 +84,8 @@ const Ahomepage = ({ currentItems }) => {
       })
       q = { ...q, "option": _option }
       // console.log(q);
+      
       array.push(q)
-      // let isvoted = false;
-      // idlist.data.map((id) => id.queryId == q.id ? isvoted = true : {})
-      // q = { ...q, "option" : [...option ,{...singleoption , "totalvote" : votes.data.voteforoneoption }]}
-
 
       return null;
     })
@@ -100,9 +97,6 @@ const Ahomepage = ({ currentItems }) => {
       setLoading(false)
     }, 1200)
 
-    // frame.sort((a, b) => new Date(a.startDate) < new Date(b.startDate) ? 1 : -1)
-
-    // console.log(fframe);
   }
 
 

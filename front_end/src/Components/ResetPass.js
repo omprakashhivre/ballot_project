@@ -1,4 +1,3 @@
-import { red } from "@mui/material/colors";
 import { useState } from "react";
 import Button from "../UI/Button";
 import '../Pages/reg.css'
@@ -9,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const ResetPass = ({emailId}) => {
   let navigate = useNavigate();
-  console.log(emailId);
   const [invalid,setInvalid] = useState();
 
   const onSubmit = async (e) => {
@@ -30,9 +28,9 @@ export const ResetPass = ({emailId}) => {
           return actualData
         })
 
-      const respdata = response
-      console.log(respdata); 
-      if (respdata.status === 1) {
+      const respData = response
+      console.log(respData); 
+      if (respData.status === 1) {
         toast.success('Password Updated Successfully..', {
           position: "bottom-right",
           autoClose: 2000,
