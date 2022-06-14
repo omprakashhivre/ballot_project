@@ -51,7 +51,7 @@ function App() {
     var array = [];
 
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://3.6.191.95:3000/query/getAllquery")
+    var allQuery = await fetch("http://3.6.191.95:4000/query/getAllquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -66,7 +66,7 @@ function App() {
       const query = singleQuery.queryName
       const id = singleQuery.queryId
       q = { "id": id, "query": query }
-      const singlequeryoptions = await fetch("http://3.6.191.95:3000/options/getalloptions", {
+      const singlequeryoptions = await fetch("http://3.6.191.95:4000/options/getalloptions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ queryId: id })
@@ -78,7 +78,7 @@ function App() {
           const opt = await actualData.data.map(async (singleoption) => {
             let firstOption = { "optionId": singleoption.optionId, "optionName": singleoption.options }
 
-            const voteaddedoption = await fetch("http://3.6.191.95:3000/users/voteforsingleoption", {
+            const voteaddedoption = await fetch("http://3.6.191.95:4000/users/voteforsingleoption", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ optionId: singleoption.optionId })

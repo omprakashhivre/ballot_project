@@ -24,7 +24,7 @@ export const ResetPass = ({emailId}) => {
       body: JSON.stringify({ email: emailId , password: e.target.password.value })
     }
 
-      const response = await fetch('http://3.6.191.95:3000/users/updatepassword', requestOptions)
+      const response = await fetch('http://3.6.191.95:4000/users/updatepassword', requestOptions)
         .then((resp) => resp.json())
         .then((actualData) => {
           return actualData

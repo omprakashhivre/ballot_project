@@ -36,7 +36,7 @@ const CreateQuery = () => {
       body: JSON.stringify(query),
     };
     try {
-      const done = await fetch("http://3.6.191.95:3000/users/addquery", requestOptions);
+      const done = await fetch("http://3.6.191.95:4000/users/addquery", requestOptions);
       const data = await done.json();
       if (data.status) {
         const querId = data.data.insertId;

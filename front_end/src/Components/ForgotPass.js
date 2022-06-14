@@ -36,7 +36,7 @@ var ForgotPass = () => {
     setemailId(givenemail)
     console.log(otp + " == " + newotp + " " + givenemail);
     try {
-      const user = await  fetch("http://3.6.191.95:3000/users/log?email="+givenemail)
+      const user = await  fetch("http://3.6.191.95:4000/users/log?email="+givenemail)
           .then((response) => response.json())
           .catch(xy => console.log(xy))
           console.log(user);
