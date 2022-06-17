@@ -43,17 +43,18 @@ const Vote = () => {
 
     var array = [];
 
-    const idlist = await fetch("http://3.6.191.95:4000/users/getidlist?userId=" + local_userId)
+    const idlist = await fetch("http://3.6.191.95:3000/users/getidlist?userId=" + local_userId)
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
       })
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://3.6.191.95:4000/users/getfilteredquery")
+    var allQuery = await fetch("http://3.6.191.95:3000/users/getfilteredquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
       })
+      console.log(allQuery);
 
     const respQueries = allQuery.data;
 
@@ -62,7 +63,7 @@ const Vote = () => {
       const query = singleQuery.queryname
       const id = singleQuery.queryId
       let option = singleQuery.options
-      q = { "id": id, "query": query, "startDate": singleQuery.queryStartDate, "endDate": singleQuery.queryenddate, isExpired: false }
+      q = { "id": id, "query": query, "startDate": singleQuery.querystartdate, "endDate": singleQuery.queryenddate, isExpired: false }
 
       const _option = []
 
@@ -70,7 +71,7 @@ const Vote = () => {
         const oid = singleoption.optionId
         let firstOption = { "optionId": oid, "optionName": singleoption.options }
 
-        const votes = await fetch("http://3.6.191.95:4000/users/voteforsingleoption?optionId=" + oid)
+        const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionId=" + oid)
           .then((resp) => resp.json())
           .then((actualData) => {
             return actualData
@@ -99,9 +100,10 @@ const Vote = () => {
 
     setTimeout(() => {
       setFrame(array)
-      setFFrame(array)
+      // setFFrame(array)
       setIsLoading(false)
-    }, 1000)
+      console.log(frame);
+    }, 1200)
     // console.log(array)
 
 
@@ -110,9 +112,9 @@ const Vote = () => {
   const setVote = (qid, optionId) => {
     // console.log(local_userId + " == " + "qid == " + qid + " option == " + optionId);
     // console.log("query id " + qid + " optionId " + optionId);
-    setFrame(frame.map((vote) => (vote.id === qid ? { ...vote, option: vote.option.map((opt) => opt.optionId == optionId ? { ...opt, totalvote: opt.totalvote + 1 } : opt), isUserVoted: true } : vote)));
+    setFrame(frame.map((vote) => (vote.id == qid ? { ...vote, option: vote.option.map((opt) => opt.optionId == optionId ? { ...opt, totalvote: opt.totalvote + 1 } : opt), isUserVoted: true } : vote)));
     // console.log(data);
-    fetch("http://3.6.191.95:4000/users/castvote", {
+    fetch("http://3.6.191.95:3000/users/castvote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ queryId: qid, optionId: optionId, userId: local_userId })
@@ -126,6 +128,7 @@ const Vote = () => {
       draggable: true,
       progress: undefined,
     });
+   
   }
 
   const handleSubmit = (e) => {
@@ -136,7 +139,7 @@ const Vote = () => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  let currentPosts = (fframe.slice(indexOfFirstPost, indexOfLastPost))
+  let currentPosts = (frame.slice(indexOfFirstPost, indexOfLastPost))
 
   return (
     <>
@@ -153,7 +156,7 @@ const Vote = () => {
                     frame.length > 0 ?
                       currentPosts.map((vote, index) => {
                         if (new Date(vote.endDate) > new Date())
-                          return <Frame key={vote.id} index={index} vote={vote} setVote={setVote} />
+                          return <Frame key={vote.id} index={index+indexOfFirstPost} vote={vote} setVote={setVote} />
 
                       }
                       ) : <h2 style={{ color: "red", textAlign: "center", marginTop: "5rem" , fontFamily:"Poppins" }}>currently no active ballots for vote...</h2>
@@ -165,8 +168,8 @@ const Vote = () => {
         </Container>
       </form>
       {
-       fframe.length !== currentPosts.length ?
-        <Pagination postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} /> :
+       fframe.length <= currentPosts.length ?
+        <Pagination postsPerPage={postsPerPage} totalPosts={frame.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} /> :
         <></>
 
       }

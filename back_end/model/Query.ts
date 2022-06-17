@@ -1,5 +1,5 @@
 
-import { Timestamp } from "mongodb";
+// import { Timestamp } from "mongodb";
 import { Entity,Column,PrimaryGeneratedColumn,BaseEntity, OneToMany } from "typeorm";
 import { Option } from "./Option";
 import { Vote } from "./Vote";
@@ -14,9 +14,9 @@ export class Query extends BaseEntity {
     queryname:string | undefined
 
     @Column({type:"timestamp" ,name:"querystartdate",nullable:false})
-    queryStartDate:Date | undefined
+    querystartdate:Date | undefined
 
-    @Column({type:"timestamp" ,name:"queryenddate",nullable:false,unique:true}) 
+    @Column({type:"timestamp" ,name:"queryenddate",nullable:false}) 
     queryenddate:Date | undefined
 
     @Column({type:"int" })

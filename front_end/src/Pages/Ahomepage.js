@@ -44,7 +44,7 @@ const Ahomepage = ({ currentItems }) => {
 
     setLoading(true)
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://3.6.191.95:4000/users/getAllquery")
+    var allQuery = await fetch("http://3.6.191.95:3000/users/getAllquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -67,10 +67,9 @@ const Ahomepage = ({ currentItems }) => {
 
       option = option.map(async (singleoption) => {
         const oid = singleoption.optionId
-        const optionName = singleoption.options
         let firstOption = { "optionId": oid, "optionName": singleoption.options }
 
-        const votes = await fetch("http://3.6.191.95:4000/users/voteforsingleoption?optionId=" + oid)
+        const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionId=" + oid)
           .then((resp) => resp.json())
           .then((actualData) => {
             return actualData
@@ -105,7 +104,7 @@ const Ahomepage = ({ currentItems }) => {
   };
 
   const removeFrame = async (id) => {
-    await fetch("http://3.6.191.95:4000/users/deletequery", {
+    await fetch("http://3.6.191.95:3000/users/deletequery", {
       method: "delete",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ queryId: id })
@@ -139,21 +138,21 @@ const Ahomepage = ({ currentItems }) => {
   //filter
   const handleFilter = async (e) => {
     if (e === 'a') {
-      setFFrame(frame)
+     await setFFrame(frame)
     }
     else if (e === "b") {
       console.log("live frames");
-      setFFrame(frame.filter(function (fr) { return (new Date(fr.endDate) > new Date()) }))
+      await setFFrame(frame.filter(function (fr) { return (new Date(fr.endDate) > new Date()) }))
       // console.log(fframe);
     }
     else if (e === 'c') {
       console.log("expires")
-      setFFrame(frame.filter(function (fr) { return (new Date(fr.endDate) <= new Date()) }))
+      await setFFrame(frame.filter(function (fr) { return (new Date(fr.endDate) <= new Date()) }))
    
     }
     else if (e === "10" || e === "5" || e === "3" || e === "2") {
       console.log(e);
-      setPostsPerPage(e)
+      await setPostsPerPage(e)
     }
 
   }
@@ -174,14 +173,14 @@ const Ahomepage = ({ currentItems }) => {
         style={{ position: "absolute", right: "30px", top: "25%" }}
         onSelect={handleFilter}
       >
-        <Dropdown.Item eventKey="a" active setSelected>All Frames</Dropdown.Item>
+        <Dropdown.Item eventKey="a" active setselected>All Frames</Dropdown.Item>
         <Dropdown.Item eventKey="b">Live Frames</Dropdown.Item>
         <Dropdown.Item eventKey="c">Expired Frames</Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item eventKey="10">10 Frame per page</Dropdown.Item>
         <Dropdown.Item eventKey="5">5 Frame per page</Dropdown.Item>
         <Dropdown.Item eventKey="3">3 Frame per page</Dropdown.Item>
-        <Dropdown.Item eventKey="2" setSelected >2 Frame per page</Dropdown.Item>
+        <Dropdown.Item eventKey="2" setselected >2 Frame per page</Dropdown.Item>
       </DropdownButton>
       <form onSubmit={handleSubmit} className="Ahomepage_form">
 
@@ -198,7 +197,7 @@ const Ahomepage = ({ currentItems }) => {
                 <>
                   {
 
-                    frame.length > 0 ?
+                    fframe.length > 0 ?
                       currentPosts.map((currElem, index) => {
                         let sum = 0;
                         currElem.option.map((op) => sum = sum + parseInt(op.totalvote))
@@ -207,17 +206,18 @@ const Ahomepage = ({ currentItems }) => {
                         return (
 
                           <div className={isexpired ? "inner_form_expired" : "inner_form"} key={currElem.id}>
-                            <h3>{index + 1}) {currElem.query}</h3>
+                            {/* update */}
+                            <h2 style={{fontWeight:"bold"}}>{index + 1 + indexOfFirstPost}) {currElem.query}</h2>
                             {/* <Overlay /> */}
                             
                             <div style={{ borderRadius: "10px", padding: "10px", backgroundColor: "#d5d6f2" }}>
                               {currElem.option.map((curr, index) => {
-
                                 return (
                                   <div key={currElem.optionsId} style={{ backgroundColor: "#d5d6f2", padding: "2px", marginTop: "2px" }}>
                                     <div className="percent_name_wrap">
                                       <span>{sum != 0 ? (Math.round(curr.totalvote / sum) * 100).toFixed() : sum}%</span>
-                                      <h3>{curr.optionName.trim()}</h3>
+                                     {/* update */}
+                                      <h3 style={{whiteSpace:'pre'}}>{curr.optionName }</h3>
                                     </div>
                                     <div className="progress p_inline_bar">
                                       <div
@@ -272,7 +272,7 @@ const Ahomepage = ({ currentItems }) => {
                             </div>
                           </div>
                         );
-                      }) : <h2 style={{ color: "red", textAlign: "center", marginTop: "5rem" }}>...</h2>
+                      }) : <h2 style={{ color: "red", textAlign: "center", marginTop: "5rem" }}>No Such Frames Found</h2>
                   }
                 </>
             }
@@ -283,10 +283,10 @@ const Ahomepage = ({ currentItems }) => {
 
       </form>
             {
-              (currentPosts.length === fframe.length) ? '' :
+              (currentPosts.length <= fframe.length) ? '' :
               <Paginatnation postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} />
             }
-      <ToastContainer
+      {/* <ToastContainer
         position="bottom-right"
         autoClose={2000}
         hideProgressBar={false}
@@ -296,7 +296,7 @@ const Ahomepage = ({ currentItems }) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />
+      /> */}
 
 
 

@@ -38,7 +38,7 @@ var Login = () => {
     }
 
 
-    const response = await fetch('http://3.6.191.95:4000/users/login', requestOptions)
+    const response = await fetch('http://3.6.191.95:3000/users/login', requestOptions)
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -97,7 +97,7 @@ var Login = () => {
             />
             <p style={{ color: "red", fontSize: "20px", display: `${inputClass ? "block" : "none"}` }} >invalid credentials</p>
             <Link to="/forgotpass" id="link" sx={{ color: "#0029FE", textDecoration: "none", fontSize: "1.5rem" }}>
-              Forget Password?
+              Forgot Password?
             </Link>
           </div>
           <Button text="LogIn" display="none" />

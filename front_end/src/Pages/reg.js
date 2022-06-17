@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //toastify
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 var Reg = () => {
@@ -49,7 +49,7 @@ var Reg = () => {
           body: JSON.stringify({ firstName: userReg.firstName, lastName: userReg.lastName, email: userReg.emailId, password: userReg.password }),
         };
 
-      const reg = await  fetch("http://3.6.191.95:4000/users/register", requestOptions)
+      const reg = await  fetch("http://3.6.191.95:3000/users/register", requestOptions)
           .then((response) => response.json())
           .catch(xy => console.log(xy))
 
@@ -138,7 +138,7 @@ var Reg = () => {
           <Button text="Create account" display="none" />
         </form>
       </Container>
-      <ToastContainer
+      {/* <ToastContainer
         position="bottom-right"
         autoClose={2000}
         hideProgressBar={false}
@@ -148,7 +148,7 @@ var Reg = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />
+      /> */}
     </>
   );
 };

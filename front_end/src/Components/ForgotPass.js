@@ -14,6 +14,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 var ForgotPass = () => {
+  const sendOtpButton = document.getElementById('otpbutton')
+  const sendOtpInput = document.getElementById('givenEmail')
+
   const [otpsends, setOtpsends] = useState(false);
   const [verifyotp, setverifyotp] = useState(false);
   const [otp, setOtp] = useState(0);
@@ -31,59 +34,65 @@ var ForgotPass = () => {
   };
   
   const sendOtp = async (givenEmail) => {
+    //changes
+    sendOtpButton.innerText = "Resend"
+    sendOtpInput.readOnly = true
+
     const newOtp = Math.floor(Math.random() * 1000000);
     setOtp(newOtp);
     setemailId(givenEmail)
+    setOtpsends(true)
     console.log(otp + " == " + newOtp + " " + givenEmail);
-    try {
-      const user = await  fetch("http://3.6.191.95:4000/users/log?email="+givenEmail)
-          .then((response) => response.json())
-          .catch(xy => console.log(xy))
-          console.log(user);
-          if(user.id == null)
-            throw new Error("email not rergistered. Kindly Register...");
+    // try {
+    //   const user = await  fetch("http://3.6.191.95:3000/users/log?email="+givenEmail)
+    //       .then((response) => response.json())
+    //       .catch(xy => console.log(xy))
+    //       console.log(user);
+    //       if(user.id == null)
+    //         throw new Error("email not rergistered. Kindly Register...");
 
 
-      emailjs
-        .send(
-          "service_ukgndsq",
-          "template_k8qpx17",
-          {
-            message: newOtp,
-            to_email: givenEmail,
-          },
-          "user_NDtOXp78ookGeIZN8R3ie"
-        )
-        .then(function (res) {
-          // console.log("status " + res.status);
-          toast.success('OTP send successfully on email -  '+givenEmail, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          })
-          setOtpsends(true);
-          document.getElementById("otpbutton").style.display = "none";
-        });
-    } catch (error) {
-      toast.warn('not able to send OTP Because, '+ error, {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    }
+    //   emailjs
+    //     .send(
+    //       "service_ukgndsq",
+    //       "template_k8qpx17",
+    //       {
+    //         message: newOtp,
+    //         to_email: givenEmail,
+    //       },
+    //       "user_NDtOXp78ookGeIZN8R3ie"
+    //     )
+    //     .then(function (res) {
+    //       // console.log("status " + res.status);
+    //       toast.success('OTP send successfully on email -  '+givenEmail, {
+    //         position: "bottom-right",
+    //         autoClose: 2000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       })
+    //       setOtpsends(true);
+    //       document.getElementById("otpbutton").style.display = "none";
+    //     });
+    // } catch (error) {
+    //   toast.warn('not able to send OTP Because, '+ error, {
+    //     position: "bottom-right",
+    //     autoClose: 2000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   })
+    // }
   };
 
   const verifyOtp = (otpgot) => {
     if (otp == otpgot) {
-      toast.success('Otp Matches ', {
+      sendOtpButton.style.display = 'none'
+      toast.success('OTP Matches, PLease Update Password', {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -93,7 +102,7 @@ var ForgotPass = () => {
         progress: undefined,
       })
       setverifyotp(true);
-    } else toast.warn('Invalid OTP', {
+    } else toast.warn('Invalid OTP, Please check it again', {
       position: "bottom-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -123,7 +132,7 @@ var ForgotPass = () => {
                 id="givenEmail"
               />
               <button className="reg_submit" onClick={() => sendOtp(document.getElementById("givenEmail").value)} id="otpbutton">
-                Send Otp
+                Send OTP
               </button>
             </div>
             {otpsends ? (
@@ -133,18 +142,21 @@ var ForgotPass = () => {
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column" }} id="otpbox">
                     <input
+                      required
                       type="number"
                       placeholder="Enter otp"
-                      required
                       autoComplete="off"
                       onChange={handleInput}
                       name="otp"
                       id="enteredotp"
                       style={{ marginRight: "20px" }}
                     />
-                    <button className="reg_submit" onClick={() => verifyOtp(document.getElementById("enteredotp").value)}>
+                    <div style={{marginTop:'20px',width:"auto",textAlign:"center"}}>
+                    <button className="reg_submit" onClick={() => verifyOtp(document.getElementById("enteredotp").value)} type='submit'>
                       Verify OTP
                     </button>
+                    </div>
+                    
                   </div>
                 )}{" "}
               </>

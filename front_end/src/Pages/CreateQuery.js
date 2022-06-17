@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 //toastify
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CreateQuery = () => {
@@ -28,10 +28,11 @@ const CreateQuery = () => {
       body: JSON.stringify(query),
     };
     try {
-      const done = await fetch("http://3.6.191.95:4000/users/addquery", requestOptions);
+      const done = await fetch("http://3.6.191.95:3000/users/addquery", requestOptions);
+      console.log(done);
       const data = await done.json();
       if (data.status) {
-        const querId = data.data.insertId;
+        // const querId = data.data.insertId;
         toast.success('Query Added successfully!', {
           position: "bottom-right",
           autoClose: 2000,
@@ -41,10 +42,12 @@ const CreateQuery = () => {
           draggable: true,
           progress: undefined,
         });
-        return querId;
+        // return querId;
+        console.log(data);
       }
     } catch (err) {
-      toast.warn('Unable to add query now!', {
+      console.log(err);
+      toast.error('Unable to add query, Try again later...', {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -59,7 +62,22 @@ const CreateQuery = () => {
 
   const createOption = () => {
     options.length < 6 ? addOptions([...options, 1]) :
+      // options.length > 2 ? document.getElementById('deleteOption').style.display = 'block' :
       toast.warn('Only six option allowed to add.', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+  };
+  // update
+  const deleteOption = () => {
+    // update
+    options.length > 2 ? addOptions(options.slice(0, -1)) :
+      toast.warn('Minimum 2 options Required', {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -92,11 +110,11 @@ const CreateQuery = () => {
       const option = document.getElementById(`${index}`).value;
       _option.push(option)
     });
-    const query = { queryName: queryName, queryEndDate: enddate, "options": _option };
+    const query = { queryName: queryName, queryenddate: enddate, "options": _option };
     // console.log(qarray);
     try {
       await fetchFunction(query);
-      navigate("/homepage")
+      // navigate("/homepage")
 
     } catch (e) {
       console.log(e);
@@ -127,9 +145,19 @@ const CreateQuery = () => {
                 return <input type="text" placeholder="Input your option here" id={index} required autoComplete="off" name={index} key={index} max={150} />;
               })}
             </div>
-            <div onClick={createOption} id="buttonWrap">
-              <Button text="Options" />
+            {/* update */}
+            <div>
+              <div onClick={createOption} id="buttonWrap" style={{marginBottom:'1.5rem'}}>
+                <Button text="Add Options" />
+              </div>
+              {
+                options.length > 2 ? <div onClick={deleteOption} id="deleteOption">
+                  <Button text="Remove Options" />
+                </div> : ''
+              }
+
             </div>
+
           </div>
           <div className="submitButton">
             <Button display="none" text="Submit" />
@@ -137,17 +165,7 @@ const CreateQuery = () => {
         </form>
       </Container>
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      
     </>
   );
 };

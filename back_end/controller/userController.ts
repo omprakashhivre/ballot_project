@@ -7,6 +7,8 @@ import { Option } from '../model/Option';
 import { Vote } from '../model/Vote';
 const env = require('dotenv').config();
 const nodemailer = require("nodemailer");
+const hbs = require('nodemailer-express-handlebars')
+
 
 
 const transporter = nodemailer.createTransport({
@@ -17,6 +19,11 @@ const transporter = nodemailer.createTransport({
         pass: process.env.PASS
     }
 })
+
+// transporter.use('compile' , hbs({
+//     viewEngine : 'express-handlebars',
+//     viewPath :'./views/'
+// }))
 
 const userReg = async (req: Request, res: Response) => {
     console.log("calling user Register");
@@ -33,8 +40,8 @@ const userReg = async (req: Request, res: Response) => {
     try {
         const data = await entityManager.insert(User , user)
         console.log("registered");
-        await sendmail(user.email, "Registered successfully..", `hi ${user.firstname},\nCongrajulations,
-        Your Account craeted successfully.\n\n\n\n...to access our services plaese login on http://localhost:3000/`)
+        await sendmail(user.email, "New User Registered successfully..", `Hi ${user.firstname},\nCongratulations,
+        Your Account created successfully.\n\n\n\n...to access our services Please login on http://3.6.191.95/`)
         res.send({
             status: 1,
             message: "Registered successfully..",
@@ -142,15 +149,22 @@ const castVote = async (req: Request, res: Response) => {
             console.log(query);
          
         
-        await sendmail(email?.email, "Thanks for Voting", `hi ${email?.firstname}, \n 
-        Your vote successfully submitted for Query id ${vote.queryId} - ${query?.queryname}.\n Thanks for Voting...`)
-       
-            res.send({
-                status: 1,
-                text: "Vote casted successfully..",
-                data: data
-            })
-
+        const mailer = await sendmail(email?.email, "Thanks for Voting", `Hi ${email?.firstname}, \n 
+        Your vote Casted successfully, for Query "${query?.queryname}".\nThanks for Voting...\n\n\nBest Regards\nBallot Team`)
+       if(mailer.status == 1){
+        res.send({
+            status: 1,
+            text: "Vote casted successfully, Check your Inbox...",
+            data: data
+        })
+       }
+       else{
+        res.send({
+            status: 1,
+            text: "Vote casted successfully, but unable to send Mail...",
+            data: data
+        })
+       }           
      } catch (error) {
         res.send({
             status: 0,
@@ -170,8 +184,10 @@ const addQuery = async (req: Request, res: Response) => {
     let qu = new Query();
     qu.queryname = req.body.queryName
     qu.userId = 1
-    qu.queryStartDate = new Date()
-    qu.queryenddate = req.body.queryEndDate
+    qu.querystartdate = new Date()
+    qu.queryenddate = new Date(req.body.queryenddate)
+    console.log(qu);
+    
 
     try {
         const data = await entityManager.insert(Query,qu)
@@ -532,26 +548,28 @@ const sendmail = (_to: any, _subject: any, _text: any) => {
             from: "ballot.project.real@gmail.com",
             to: receiver,
             subject: subject,
-            text: bodytext
+            text: bodytext,
+            // template : 'emailTemplate',
+            // context : {
+            //     userName : 'xc'
+            // }
         }
        
         transporter.sendMail(options, (err: string, info: string) => {
             if (err) {
                 console.log("error occurred :" + err)
-                return err
+                return {status:0,msg:err}
             }
             else {
                 console.log("email send successsfully to ---> " + receiver);
-                return info
+                return {status:1,msg:info}
             }
 
         })
-        return "check your inbox, email sended successfully..."
-        // const send = sendRe(receiver, subject, bodytext);
-        // res.send("mail sended !!! khoooooosh == " + send)
+        return {status : 1 , msg : "check your inbox, email sended successfully..."}
     } catch (error) {
         console.log(error);
-        return 'Something went wrong : '+error
+        return {status:0,msg:error}
         // Logger.error("not able to send mail to ");
     }
 }

@@ -22,7 +22,7 @@ export const ResetPass = ({emailId}) => {
       body: JSON.stringify({ email: emailId , password: e.target.password.value })
     }
 
-      const response = await fetch('http://3.6.191.95:4000/users/updatepassword', requestOptions)
+      const response = await fetch('http://3.6.191.95:3000/users/updatepassword', requestOptions)
         .then((resp) => resp.json())
         .then((actualData) => {
           return actualData
@@ -46,7 +46,8 @@ export const ResetPass = ({emailId}) => {
       }, 500)
       }
       else {
-        toast.error('Unable to update Password', {
+        // update
+        toast.error('Something went wrong, Try again', {
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -67,10 +68,13 @@ export const ResetPass = ({emailId}) => {
     
     <div>
     <form action="#" onSubmit={onSubmit}>
-        <input type="text" placeholder="Password" required autoComplete="off"  name="password" className={invalid} />
-        <input type="password" placeholder="Confirm Password" required autoComplete="off" name="cpassword"  className={invalid}/>
+      {/* update */}
+        <input type="text" placeholder="New Password" required autoComplete="off"  name="password" className={invalid} min='8' />
+        <input type="password" placeholder="Confirm New Password" required autoComplete="off" name="cpassword"  className={invalid}/>
         <p style={{color:"red",fontSize:"20px",display:`${invalid ? "block" : "none"}`}}>something goes wrong</p>
+        <div style={{marginTop:'15px',textAlign:'center'}}>
         <Button text="Update Password">Update Password</Button>
+        </div>
     </form>
     <ToastContainer
         position="bottom-right"

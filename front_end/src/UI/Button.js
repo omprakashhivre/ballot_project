@@ -7,7 +7,7 @@ const Button = (props) => {
 
   return (
     <button type="submit" className="reg_submit">
-      <img src={require("../image/plus.png")} width={"30rem"} height={"30rem"} style={{ display }} alt="plus_icon" />
+      {/* <img src={require("../image/plus.png")} width={"30rem"} height={"30rem"} style={{ display }} alt="plus_icon" /> */}
       {text}
     </button>
   );

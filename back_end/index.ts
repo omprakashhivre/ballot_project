@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser");
 import express,{Request,Response} from "express"
 import { createConnection } from "typeorm";
-import { router } from "./router/routes";
+import { router } from "./router/Routes";
 
 const app = express();
 // Enables CORS
