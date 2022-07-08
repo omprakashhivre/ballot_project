@@ -43,13 +43,13 @@ const Vote = () => {
 
     var array = [];
 
-    const idlist = await fetch("http://3.6.191.95:3000/users/getidlist?userId=" + local_userId)
+    const idlist = await fetch("http://localhost:3000/users/getidlist?userId=" + local_userId)
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
       })
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://3.6.191.95:3000/users/getfilteredquery")
+    var allQuery = await fetch("http://localhost:3000/users/getfilteredquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -71,7 +71,7 @@ const Vote = () => {
         const oid = singleoption.optionId
         let firstOption = { "optionId": oid, "optionName": singleoption.options }
 
-        const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionId=" + oid)
+        const votes = await fetch("http://localhost:3000/users/voteforsingleoption?optionId=" + oid)
           .then((resp) => resp.json())
           .then((actualData) => {
             return actualData
@@ -114,7 +114,7 @@ const Vote = () => {
     // console.log("query id " + qid + " optionId " + optionId);
     setFrame(frame.map((vote) => (vote.id == qid ? { ...vote, option: vote.option.map((opt) => opt.optionId == optionId ? { ...opt, totalvote: opt.totalvote + 1 } : opt), isUserVoted: true } : vote)));
     // console.log(data);
-    fetch("http://3.6.191.95:3000/users/castvote", {
+    fetch("http://localhost:3000/users/castvote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ queryId: qid, optionId: optionId, userId: local_userId })
@@ -169,23 +169,13 @@ const Vote = () => {
       </form>
       {
        fframe.length <= currentPosts.length ?
-        <Pagination postsPerPage={postsPerPage} totalPosts={frame.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} /> :
+        <Pagination postsPerPage={postsPerPage} totalPosts={frame.length} paginate={paginate} style={{ position: "absolute", bottom: "2rem" }} /> :
         <></>
 
       }
-      
+      {/*  */}
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+     
 
     </>
   )

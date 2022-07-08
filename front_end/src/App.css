@@ -1,5 +1,6 @@
 .background {
-  background: linear-gradient(247.32deg, rgba(0, 0, 0, 0) 0%, rgba(25, 25, 35, 1) 20.8%), url(./image/bg.jpg);
+  /* background: linear-gradient(247.32deg, rgba(0, 0, 0, 0) 0%, rgba(25, 25, 35, 1) 20.8%), url(./image/bg.jpg); */
+  background : white;
   background-blend-mode: hard-light, normal;
   background-repeat: no-repeat;
   background-size: contain;
@@ -9,6 +10,7 @@
   height: 100vh;
   padding: 1.4rem 2.5rem;
   overflow-y: scroll;
+  color:black;
 }
 /* .container_wrap{
   width: 100%;
@@ -65,3 +67,4 @@
     font-size: 90%;
   }
 }
+

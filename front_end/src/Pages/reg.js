@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 var Reg = () => {
-  const [invalid, setInvalid] = useState();
+  const [invalidClass, setInvalidClass] = useState({class : "" , msg : ""})
   let navigate = useNavigate();
   // const  [c_password_error, updateC_password_error] = useState("");
   const [userReg, updateuserReg] = useState({
@@ -49,9 +49,9 @@ var Reg = () => {
           body: JSON.stringify({ firstName: userReg.firstName, lastName: userReg.lastName, email: userReg.emailId, password: userReg.password }),
         };
 
-      const reg = await  fetch("http://3.6.191.95:3000/users/register", requestOptions)
+      const reg = await  fetch("http://localhost:3000/users/register", requestOptions)
           .then((response) => response.json())
-          .catch(xy => console.log(xy))
+          .catch(setInvalidClass({class : "invalid" , msg : "Server Not Respond..."}))
 
           if(reg.status === 1)
             { updateuserReg({ firstName: "", lastName: "", emailId: "", password: "", c_password: "" });
@@ -73,7 +73,7 @@ var Reg = () => {
           }  
 
       } else {
-        setInvalid('invalid')
+        setInvalidClass({class : "invalid" , msg : "Password & confirm Password must match"})
         toast.warn('Passsword not matches', {
           position: "bottom-right",
           autoClose: 2000,
@@ -120,7 +120,7 @@ var Reg = () => {
             
 
 
-            <input type="password" placeholder="Password" required autoComplete="off" value={userReg.password} onChange={handleInput} name="password" className={invalid} min="8" />
+            <input type="password" placeholder="Password" required autoComplete="off" value={userReg.password} onChange={handleInput} name="password" className={invalidClass.class} min="8" />
             <input
               type="password"
               placeholder="Confirm Password"
@@ -129,11 +129,11 @@ var Reg = () => {
               value={userReg.c_password}
               onChange={handleInput}
               name="c_password"
-              className={invalid}
+              className={invalidClass.class}
             // style={{c_password_error}}
             />
 
-            <p style={{ color: "red", fontSize: "20px", display: `${invalid ? '' : 'none'}` }}>password and conform password must match</p>
+            <p style={{ color: "red", fontSize: "20px", display: `${invalidClass.class ? '' : 'none'}` }}>{invalidClass.msg}</p>
           </div>
           <Button text="Create account" display="none" />
         </form>

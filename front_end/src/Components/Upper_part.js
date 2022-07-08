@@ -12,7 +12,7 @@ const Upperpart = (props) => {
         sx={{
           fontFamily: "Poppins",
           fontSize: "4.5rem",
-          color: "white",
+          color: "black",
           fontWeight: "700",
         }}
       >
@@ -36,7 +36,7 @@ const Upperpart = (props) => {
           fontFamily: "Poppins",
           fontSize: "1.5rem",
           fontWeight: "light",
-          color: "white",
+          color: "black",
           lineHeight: "3.25rem",
         }}
       >

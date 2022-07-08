@@ -16,7 +16,7 @@
 p {
   text-transform: uppercase;
   font-family: "Poppins", sans-serif;
-  color: white;
+  color: rgb(0, 0, 0);
   text-align: start;
   margin: 0rem;
   width: 41.231%;
@@ -27,7 +27,7 @@ p {
 }
 span {
   font-size: 1rem;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 form {
   position: relative;
@@ -47,12 +47,12 @@ form {
 input {
   /* width: 45%;
   height: 5%; */
-  background: rgb(165, 165, 165, 0.4);
+  background: rgba(123, 121, 121, 0.4);
   background-blend-mode: hard-light;
   border-radius: 0.625rem;
   padding: 1.5rem;
   border: none;
-  color: white;
+  color: rgb(0, 0, 0);
   font-weight: 500;
   font-size: 1.5rem;
   /* margin-right: 2rem; */

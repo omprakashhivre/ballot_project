@@ -7,7 +7,6 @@
   display: flex;
   align-items: center;
   padding-left: 0.5rem;
-  color: white;
 }
 .img-size {
   width: 2.75rem;
@@ -23,27 +22,28 @@
   justify-content: flex-start;
   align-items: center;
   margin: 0rem 0rem 0rem 0rem;
-  width: 15%;
 }
 nav{
-  /* position: fixed!important; */
+  position: fixed;
+  top: 0;
+  padding: .8% 2%;
   z-index:10;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* background-color: aqua; */
-  width: 90%;
+  width: 99.99%;
+  background-color: rgb(128,128,128,.7);
 }
 #profile_pic{
-  border-radius: 2.5rem;
-  width: 3.963rem;
-  height: 3.813rem;
+  border-radius: 100%;
+  width: fit-content;
   margin: auto;
   text-align: center;
   padding: 0.6rem;
-  font-size: 24px!important;
+  font-size: 2rem!important;
   background-color: #0029fe;
+  align-self: center;
   
 }
 #imgSpan_wrap{
@@ -51,9 +51,7 @@ nav{
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* flex-wrap: wrap; */
-  /* background-color: blue; */
-  width: 20%;
+  flex-wrap: wrap;
   padding-right: 1rem;
 }
 #imgSpan_wrap span{
@@ -66,5 +64,4 @@ nav{
   font-size: 1.2rem;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
-  color: white;
 }

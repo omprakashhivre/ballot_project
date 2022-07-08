@@ -2,6 +2,7 @@ import "./framestyle.css";
 import "../Pages/Ahomepage.css";
 import Container from "@mui/material/Container";
 import { useState } from 'react'
+
 export const Frame = ({ vote, setVote, index }) => {
   const [timer, setTimer] = useState('')
   const [frameExpired, setFrameExpired] = useState(false)

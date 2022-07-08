@@ -44,7 +44,7 @@ const Ahomepage = ({ currentItems }) => {
 
     setLoading(true)
     console.log("getAllQuery called");
-    var allQuery = await fetch("http://3.6.191.95:3000/users/getAllquery")
+    var allQuery = await fetch("http://localhost:3000/users/getAllquery")
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
@@ -69,7 +69,7 @@ const Ahomepage = ({ currentItems }) => {
         const oid = singleoption.optionId
         let firstOption = { "optionId": oid, "optionName": singleoption.options }
 
-        const votes = await fetch("http://3.6.191.95:3000/users/voteforsingleoption?optionId=" + oid)
+        const votes = await fetch("http://localhost:3000/users/voteforsingleoption?optionId=" + oid)
           .then((resp) => resp.json())
           .then((actualData) => {
             return actualData
@@ -104,7 +104,7 @@ const Ahomepage = ({ currentItems }) => {
   };
 
   const removeFrame = async (id) => {
-    await fetch("http://3.6.191.95:3000/users/deletequery", {
+    await fetch("http://localhost:3000/users/deletequery", {
       method: "delete",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ queryId: id })
@@ -125,7 +125,6 @@ const Ahomepage = ({ currentItems }) => {
   //login pagination
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-
   let currentPosts = (fframe.slice(indexOfFirstPost, indexOfLastPost))
   // console.log(currentPosts);
 
@@ -152,7 +151,7 @@ const Ahomepage = ({ currentItems }) => {
     }
     else if (e === "10" || e === "5" || e === "3" || e === "2") {
       console.log(e);
-      await setPostsPerPage(e)
+      await setPostsPerPage(parseInt(e))
     }
 
   }
@@ -283,23 +282,10 @@ const Ahomepage = ({ currentItems }) => {
 
       </form>
             {
-              (currentPosts.length <= fframe.length) ? '' :
-              <Paginatnation postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} style={{ position: "absolute", bottom: "20px" }} />
+              // update ------------------------------------------- // 
+              (currentPosts.length == frame.length) ? '' :
+              <Paginatnation postsPerPage={postsPerPage} totalPosts={fframe.length} paginate={paginate} className='paginate' />
             }
-      {/* <ToastContainer
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      /> */}
-
-
-
     </>
   );
 

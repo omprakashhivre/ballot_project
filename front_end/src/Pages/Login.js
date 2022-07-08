@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 var Login = () => {
 
-  const [inputClass, setInputClass] = useState()
+  const [inputClass, setInputClass] = useState({class : "" , msg : ""})
   const [UserReg, updateUserReg] = useState({
     email: "",
     password: "",
@@ -38,11 +38,11 @@ var Login = () => {
     }
 
 
-    const response = await fetch('http://3.6.191.95:3000/users/login', requestOptions)
+    const response = await fetch('http://localhost:3000/users/login', requestOptions)
       .then((resp) => resp.json())
       .then((actualData) => {
         return actualData
-      })
+      }).catch(setInputClass({class : "invalid" , msg : "Not able to fetch data from server"}))
 
     console.log(response);
     const respdata = response.data
@@ -69,7 +69,7 @@ var Login = () => {
     }
     else {
       setLoginData(respdata)
-      setInputClass("invalid")
+      setInputClass({class : "invalid" , msg : "Please enter correct Credentials"})
     }
 
   };
@@ -83,7 +83,7 @@ var Login = () => {
         <Upperpart top_heading="Welcome! Again" heading="Login" bottom_heading="New here?" link="Register account" href="/reg" />
         <form action="#" onSubmit={onsubmit}>
           <div className="email-to-password" id="login_input">
-            <input type="email" placeholder="Email" required autoComplete="off" value={UserReg.email} onChange={handleInput} name="email" className={inputClass} />
+            <input type="email" placeholder="Email" required autoComplete="off" value={UserReg.email} onChange={handleInput} name="email" className={inputClass.class} />
 
             <input
               type="password"
@@ -93,9 +93,9 @@ var Login = () => {
               value={UserReg.password}
               onChange={handleInput}
               name="password"
-              className={inputClass}
+              className={inputClass.class}
             />
-            <p style={{ color: "red", fontSize: "20px", display: `${inputClass ? "block" : "none"}` }} >invalid credentials</p>
+            <p style={{ color: "red", fontSize: "20px", display: `${inputClass.class ? "block" : "none"}` }} >{inputClass.msg}</p>
             <Link to="/forgotpass" id="link" sx={{ color: "#0029FE", textDecoration: "none", fontSize: "1.5rem" }}>
               Forgot Password?
             </Link>

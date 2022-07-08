@@ -28,7 +28,7 @@ const CreateQuery = () => {
       body: JSON.stringify(query),
     };
     try {
-      const done = await fetch("http://3.6.191.95:3000/users/addquery", requestOptions);
+      const done = await fetch("http://localhost:3000/users/addquery", requestOptions);
       console.log(done);
       const data = await done.json();
       if (data.status) {
@@ -75,17 +75,17 @@ const CreateQuery = () => {
   };
   // update
   const deleteOption = () => {
-    // update
-    options.length > 2 ? addOptions(options.slice(0, -1)) :
-      toast.warn('Minimum 2 options Required', {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    if(options.length > 2) 
+      addOptions(options.slice(0, -1)) 
+      // toast.warn('Minimum 2 options Required', {
+      //   position: "bottom-right",
+      //   autoClose: 2000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
   };
 
   const handleSubmit = async (e) => {
@@ -114,7 +114,7 @@ const CreateQuery = () => {
     // console.log(qarray);
     try {
       await fetchFunction(query);
-      // navigate("/homepage")
+     navigate("/homepage")
 
     } catch (e) {
       console.log(e);
@@ -153,7 +153,7 @@ const CreateQuery = () => {
               {
                 options.length > 2 ? <div onClick={deleteOption} id="deleteOption">
                   <Button text="Remove Options" />
-                </div> : ''
+                </div> : <></>
               }
 
             </div>

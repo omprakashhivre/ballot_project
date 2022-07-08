@@ -1,48 +1,37 @@
 .Ahomepage_form {
   left: 10rem;
   top: 5%;
-  /* position: fixed; */
-}
-.Inner_container {
-  width: 100%;
-  padding: 0px !important;
-  margin-top: 1rem;
 }
 #Outer_container {
-  /* background-color: aqua; */
-  padding: 0px !important;
+  margin-top: 16%;
+  padding-bottom: 2% !important;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
-  width: 100% !important;
+  width: 100%;
 }
 .inner_form {
-  width: 80%;
+  width: 100%;
   background-color: white;
   padding: 2rem;
-  float: right;
+  float: left;
   margin-bottom: 1rem;
-  font-family: Poppins;
+  border: 2px solid black;
+  border-radius: 1rem;
 }
 .inner_form_expired {
-  width: 80%;
-  background-color: rgb(197, 195, 195);
+  width: 100%;
+  background-color: rgb(246, 214, 214);
   padding: 2rem;
-  float: right;
+  float: left;
   margin-bottom: 1rem;
-  opacity: 95%;
-  font-weight: bold;
-  
+  border: 1px solid rgb(255, 0, 0);
+  border-radius: 1rem;
 }
 .inner_form h3 {
   font-weight: 600;
 }
-.singleOption{
-  background-color:"#999999";
-  padding:"2px";
-  margin-top:"2px"
-}
-.singleOption:hover {
-  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+.inner_form_expired h3 {
+  font-weight: 600;
 }
 .p_inline_bar {
   /* for inline progress bar */
@@ -60,19 +49,41 @@
   font-weight: 500;
 }
 .percent_name_wrap {
-  width: 21%;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+.percent_name_wrap input {
+  margin-top: -1% !important;
+  margin-right: 2%;
 }
 .inline-progress-bar {
   color: #40e0d0;
   border-radius: 1rem;
+}
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  align-content: center !important;
+  height: 0%;
+}
+.checkbox span {
+  color: black;
+  font-weight: bolder;
+  height: 1%;
+  margin: 0%;
+  align-self: flex-end;
+  padding-left: 1%;
+  position: relative;
+  bottom: 0;
 }
 .bottom_form {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 300;
@@ -84,7 +95,7 @@
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 22%;
+  width: 53%;
 }
 .EditRemoveIcon_wrap {
   display: flex;
@@ -96,11 +107,11 @@
   display: flex;
   flex-wrap: wrap;
 }
-.EditRemoveIcon_wrap img{
+.EditRemoveIcon_wrap img {
   width: 2.4rem;
   height: 2.4rem;
 }
-.usersPic{
+.usersPic {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -113,22 +124,30 @@
   width: 2rem;
   height: 2rem;
 }
-#add_frame{
-  float: left;
-  margin-bottom: 1rem;
+.usersPic img:nth-child(2) {
+  position: absolute;
+  left: 22.2%;
 }
-.usersPic img:nth-child(2){
-    position: absolute;
-    left: 22.2%;
-    
+.usersPic img:nth-child(3) {
+  position: absolute;
+  left: 21%;
 }
-.usersPic img:nth-child(3){
-    position: absolute;
-    left: 21%;
-    
+.usersPic img:nth-child(1) {
+  position: relative;
 }
-.usersPic img:nth-child(1){
-    position: relative;
-    /* bottom: -0.2%!important; */
-   
+button {
+  background: none;
+  border: none;
+}
+.percent_name_wrap>input{
+  margin-top: 0.3%;
+}
+
+#add_frame {
+  margin-bottom: 2rem;
+  
+}
+
+.paginate {
+  bottom: 10rem;
 }
