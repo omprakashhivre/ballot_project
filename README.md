@@ -34,7 +34,7 @@ The project is structured into two folders:
 - **Node.js**: Runtime environment for the backend server.
 - **Express.js**: Web application framework for Node.js.
 - **MySQL**: Relational database management system for storing ballot data.
-- **JWT (JSON Web Tokens)**: Token-based authentication mechanism for securing API endpoints.
+- **Typescript**
 
 ## Installation and Setup
 
